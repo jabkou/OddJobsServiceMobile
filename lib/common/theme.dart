@@ -6,6 +6,7 @@ final appTheme = ThemeData(
     display4: TextStyle(
       fontSize: 20,
       color: Colors.black,
+      fontWeight: FontWeight.bold,
     ),
   ),
 );

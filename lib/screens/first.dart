@@ -4,15 +4,26 @@ class MyFirst extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("bck.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Container(
-          padding: EdgeInsets.all(80.0),
+          padding: EdgeInsets.all(100.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 'Welcome! \n What you want to do?\n',
-                style: Theme.of(context).textTheme.display4,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
               ),
 
               RaisedButton(
