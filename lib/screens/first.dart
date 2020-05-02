@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutterappservice/widgets/navbar.dart';
 
 class MyFirst extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      drawer: NavDrawer(),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("bck.jpg"),
+            image: AssetImage("images/bck.jpg"),
             fit: BoxFit.cover,
           ),
         ),
+
         child: Container(
-          padding: EdgeInsets.all(100.0),
+          padding: EdgeInsets.fromLTRB(100.0, 0.0, 100.0, 150.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

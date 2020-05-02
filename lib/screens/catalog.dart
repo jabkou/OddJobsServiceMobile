@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/models/cart.dart';
 import 'package:flutterappservice/models/catalog.dart';
+import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:provider/provider.dart';
 
 
@@ -8,9 +9,14 @@ class MyCatalog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      drawer: NavDrawer(),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: CustomScrollView(
         slivers: [
-          _MyAppBar(),
           SliverToBoxAdapter(child: SizedBox(height: 12)),
           SliverList(
             delegate: SliverChildBuilderDelegate(
