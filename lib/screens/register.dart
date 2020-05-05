@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutterappservice/screens/cart.dart';
+import 'package:flutterappservice/common/constants.dart';
+import 'package:flutterappservice/screens/login.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -112,24 +113,38 @@ class _RegisterState extends State<Register> {
   }
 
   _register() async {
-    Map data = {
-      "firstName": _firstName.text,
+    // Map data = {
+    //   "firstName": _firstName.text,
+    //   "lastName": _lastName.text,
+    //   "username": _username.text,
+    //   "email": _email.text,
+    //   "password": _password.text,
+    //   "phoneNumber": _phoneNumber.text,
+    // };
+    print("Sitek");
+    // print(data);
+    print("Sitek2");
+    var jsonData;
+    var response = await http.post(
+      registerUrl,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "firstName": _firstName.text,
       "lastName": _lastName.text,
       "username": _username.text,
       "email": _email.text,
       "password": _password.text,
       "phoneNumber": _phoneNumber.text,
-    };
-    var jsonData;
-    var response =
-        await http.post("http://149.156.146.249:60021/api/users", body: data);
-    print("witam");
+      }),
+    );
     print(response.body);
     if (response.statusCode == 200) {
       jsonData = json.decode(response.body);
       if (jsonData != null) {
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => MyCart()),
+            MaterialPageRoute(builder: (BuildContext context) => MyLogin()),
             (Route<dynamic> route) => false);
       } else {
         print(response.body);
