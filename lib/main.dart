@@ -3,6 +3,7 @@ import 'package:flutterappservice/screens/cart.dart';
 import 'package:flutterappservice/screens/catalog.dart';
 import 'package:flutterappservice/screens/first.dart';
 import 'package:flutterappservice/screens/login.dart';
+import 'package:flutterappservice/screens/register.dart';
 import 'package:provider/provider.dart';
 
 import 'common/theme.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           '/login': (context) => MyLogin(),
           '/catalog': (context) => MyCatalog(),
           '/cart': (context) => MyCart(),
+          '/register': (context) => Register(),
         },
       ),
     );
