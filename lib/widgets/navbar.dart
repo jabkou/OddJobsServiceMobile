@@ -27,6 +27,11 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {Navigator.pushReplacementNamed(context, '/login')},
           ),
           ListTile(
+            leading: Icon(Icons.add),
+            title: Text('Register'),
+            onTap: () => {Navigator.pushReplacementNamed(context, '/register')},
+          ),
+          ListTile(
             leading: Icon(Icons.verified_user),
             title: Text('Looking for job'),
             onTap: () => {Navigator.pushReplacementNamed(context, '/catalog')},
