@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterappservice/common/constants.dart';
 import 'package:flutterappservice/screens/cart.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,11 +64,10 @@ class _MyLoginState extends State<MyLogin> {
                 color: Colors.cyan,
                 child: Text('NEXT'),
                 onPressed: () {
-                  // setState(() {
-                  //   _isLoading = true;
-                  // });
-                  this.signIn(_login, _password);
-                  Navigator.pushReplacementNamed(context, '/catalog');
+                  // type 'Future<dynamic>' is not a subtype of type 'bool'
+                  if (this.signIn(_login.text, _password.text)) {
+                    Navigator.pushReplacementNamed(context, '/catalog');
+                  }
                 },
               )
             ],
@@ -79,30 +79,33 @@ class _MyLoginState extends State<MyLogin> {
 
   signIn(login, password) async {
     Map data = {
-      'login': login,
+      'username': login,
       'password': password,
     };
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    // print("hello0"); nie ma innej mozliwosci sprawdzenie bo api nie dziala ;/
-    // kom sa do czekania na odp bedzie kolo ktore czeka na autoryzacje
+    print(data);
     var jsonData;
-    var response =
-        await http.post("http://149.156.146.249:60021/api/login", body: data);
-    // print('hello');
+    var response = await http.post(
+      loginUrl,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(data),
+    );
     if (response.statusCode == 200) {
       jsonData = json.decode(response.body);
-      if (jsonData != null) {
-        // setState(() {
-        //   _isLoading = false;
-        // });
+      if (jsonData["success"] == "true") {
         sharedPreferences.setString("token", jsonData['token']);
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MyCart()), (Route<dynamic> route) => false);
+        print("jestes zalogowany");
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => MyCart()),
+            (Route<dynamic> route) => false);
+        return true;
       } else {
-        // setState(() {
-        //   _isLoading = false;
-        // });
         print(response.body);
+        return false;
       }
     }
+    return false;
   }
 }
