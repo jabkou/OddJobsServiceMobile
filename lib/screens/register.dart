@@ -113,33 +113,22 @@ class _RegisterState extends State<Register> {
   }
 
   _register() async {
-    // Map data = {
-    //   "firstName": _firstName.text,
-    //   "lastName": _lastName.text,
-    //   "username": _username.text,
-    //   "email": _email.text,
-    //   "password": _password.text,
-    //   "phoneNumber": _phoneNumber.text,
-    // };
-    print("Sitek");
-    // print(data);
-    print("Sitek2");
+    Map data = {
+      "firstName": _firstName.text,
+      "lastName": _lastName.text,
+      "username": _username.text,
+      "email": _email.text,
+      "password": _password.text,
+      "phoneNumber": _phoneNumber.text,
+    };
     var jsonData;
     var response = await http.post(
       registerUrl,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
-        "firstName": _firstName.text,
-      "lastName": _lastName.text,
-      "username": _username.text,
-      "email": _email.text,
-      "password": _password.text,
-      "phoneNumber": _phoneNumber.text,
-      }),
+      body: json.encode(data),
     );
-    print(response.body);
     if (response.statusCode == 200) {
       jsonData = json.decode(response.body);
       if (jsonData != null) {
