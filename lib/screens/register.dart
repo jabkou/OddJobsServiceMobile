@@ -99,8 +99,11 @@ class _RegisterState extends State<Register> {
                     color: Colors.cyan,
                     child: Text('REGISTER'),
                     onPressed: () {
-                      _register();
-                      Navigator.pushReplacementNamed(context, '/login');
+                      //'Future<dynamic>' is not a subtype of type 'bool' ogolnie funkcja zwraca bool ale powinna zwracac future
+                      //dynamic bo jest async ale dziala trzeba bezdie rozwiazac ten problem inaczej
+                      if (_register()) {
+                        Navigator.pushReplacementNamed(context, '/login');
+                      }
                     },
                   ),
                 ],
@@ -131,13 +134,39 @@ class _RegisterState extends State<Register> {
     );
     if (response.statusCode == 200) {
       jsonData = json.decode(response.body);
-      if (jsonData != null) {
+      if (jsonData.length == 0) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => MyLogin()),
             (Route<dynamic> route) => false);
+        return true;
       } else {
+        showAlertDialog();
         print(response.body);
+        return false;
       }
     }
+    return false;
+  }
+
+  showAlertDialog() {
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text("My title"),
+      content: Text("This is my message."),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
