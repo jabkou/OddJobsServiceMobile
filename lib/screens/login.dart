@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/common/constants.dart';
+import 'package:flutterappservice/models/user.dart';
 import 'package:flutterappservice/screens/cart.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,8 +14,9 @@ class MyLogin extends StatefulWidget {
 
 class _MyLoginState extends State<MyLogin> {
   final TextEditingController _login = new TextEditingController();
-
   final TextEditingController _password = new TextEditingController();
+  User user;
+  bool loginSucces = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,8 @@ class _MyLoginState extends State<MyLogin> {
                 child: Text('NEXT'),
                 onPressed: () {
                   // type 'Future<dynamic>' is not a subtype of type 'bool'
-                  if (this.signIn(_login.text, _password.text)) {
+                  this.signIn(_login.text, _password.text);
+                  if (this.loginSucces) {
                     Navigator.pushReplacementNamed(context, '/catalog');
                   }
                 },
@@ -83,7 +86,6 @@ class _MyLoginState extends State<MyLogin> {
       'password': password,
     };
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    print(data);
     var jsonData;
     var response = await http.post(
       loginUrl,
@@ -97,15 +99,38 @@ class _MyLoginState extends State<MyLogin> {
       if (jsonData["success"] == "true") {
         sharedPreferences.setString("token", jsonData['token']);
         print("jestes zalogowany");
+        //try catch...
+        _getUserData(login);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => MyCart()),
             (Route<dynamic> route) => false);
-        return true;
+        this.loginSucces = true;
       } else {
+        //alertbox zle haslo lub login
         print(response.body);
-        return false;
       }
     }
-    return false;
+    //alertbox problem z nawiazaniem polaczenia
+  }
+
+  _getUserData(String login) async {
+    var response = await http.get(
+      userDataUrl + login,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      print("Siema");
+      this.user = new User(login, data["firstName"], data["lastName"], data["email"], data["phoneNumber"],
+          data["userProfilePhotoUrl"], data["blocked"]);
+      print(this.user.getFirstName());
+      print(this.user.getLastName());
+    }
+    else{
+      // jakis exception
+      print("blad");
+    }
   }
 }
