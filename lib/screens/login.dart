@@ -117,11 +117,13 @@ class _MyLoginState extends State<MyLogin> {
             "Nieprawidłowy login lub hasło", "OK");
       }
     }
+    else{
     AlertBox.showAlertDialog(
         context,
         "Upss... wystapil problem z nawiazanie polaczenia",
         response.statusCode.toString(),
         "OK");
+    }
   }
 
   _getUserData(String login) async {
