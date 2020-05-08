@@ -4,6 +4,7 @@ import 'package:flutterappservice/screens/login.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../widgets/alertbox.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController _firstName = new TextEditingController();
   final TextEditingController _lastName = new TextEditingController();
   final TextEditingController _phoneNumber = new TextEditingController();
+  bool succRegister = false;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +103,8 @@ class _RegisterState extends State<Register> {
                     onPressed: () {
                       //'Future<dynamic>' is not a subtype of type 'bool' ogolnie funkcja zwraca bool ale powinna zwracac future
                       //dynamic bo jest async ale dziala trzeba bezdie rozwiazac ten problem inaczej
-                      if (_register()) {
+                      _register();
+                      if (this.succRegister) {
                         Navigator.pushReplacementNamed(context, '/login');
                       }
                     },
@@ -138,35 +141,16 @@ class _RegisterState extends State<Register> {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => MyLogin()),
             (Route<dynamic> route) => false);
-        return true;
+        this.succRegister = true;
       } else {
-        showAlertDialog();
-        print(response.body);
-        return false;
+        AlertBox.showAlertDialog(context, "Problemy", response.body, "OK");
       }
+    } else {
+      AlertBox.showAlertDialog(
+          context,
+          "Upss... wystapil problem z nawiazanie polaczenia",
+          response.statusCode.toString(),
+          "OK");
     }
-    return false;
-  }
-
-  showAlertDialog() {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("My title"),
-      content: Text("This is my message."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
   }
 }
