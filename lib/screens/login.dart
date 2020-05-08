@@ -126,6 +126,7 @@ class _MyLoginState extends State<MyLogin> {
         this.loginSucces = true;
       }
      else {
+      _password.clear();
       throw Exception("Nieprawidłowy login lub hasło");
     }
   }
