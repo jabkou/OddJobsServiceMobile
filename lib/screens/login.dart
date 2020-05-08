@@ -98,13 +98,15 @@ class _MyLoginState extends State<MyLogin> {
       jsonData = json.decode(response.body);
       if (jsonData["success"] == "true") {
         sharedPreferences.setString("token", jsonData['token']);
-        print("jestes zalogowany");
-        //try catch...
+        try{
         _getUserData(login);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => MyCart()),
             (Route<dynamic> route) => false);
         this.loginSucces = true;
+        } on Exception catch(_){
+          
+        }
       } else {
         //alertbox zle haslo lub login
         print(response.body);
@@ -129,8 +131,7 @@ class _MyLoginState extends State<MyLogin> {
       print(this.user.getLastName());
     }
     else{
-      // jakis exception
-      print("blad");
+      throw Exception("Blad polaczenia: " + response.statusCode.toString());
     }
   }
 }
