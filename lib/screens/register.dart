@@ -92,6 +92,7 @@ class _RegisterState extends State<Register> {
   _checkData() {
     _confPasswords();
     final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
+    final nameregex = RegExp(r"^[a-zA-Z]+$");
     //final passwordRegex = RegExp(r'[^\s]+');
     final emailRegex =
         RegExp(r"^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
@@ -99,13 +100,17 @@ class _RegisterState extends State<Register> {
     if (!alphanumeric.hasMatch(_username.text) ||
         !alphanumeric.hasMatch(_password.text))
       throw Exception("Nieprawidłowy znak");
-    if (_password.text.length < 3 || _password.text.length > 30)
+    if (_password.text.length < 3 || _password.text.length > 70)
       throw Exception("Nieprawidłowa długość hasła");
     if (_username.text.length < 3 || _username.text.length > 30)
       throw Exception("Nieprawidłowa długość loginu");
     if (!emailRegex.hasMatch(_email.text)) throw Exception("Błędny email");
     if (!phonRegex.hasMatch(_phoneNumber.text) || _phoneNumber.text.length != 9)
       throw Exception("Błędny numer");
+    if(!nameregex.hasMatch(_firstName.text) || _firstName.text.length < 3 ||_firstName.text.length > 30)
+      throw Exception("Błędne imie");
+    if(!nameregex.hasMatch(_lastName.text) || _lastName.text.length < 3 ||_lastName.text.length > 30)
+      throw Exception("Błędne nazwisko");
   }
 
   _confPasswords() {
