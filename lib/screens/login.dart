@@ -6,6 +6,7 @@ import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../widgets/alertbox.dart';
 
 class MyLogin extends StatefulWidget {
   @override
@@ -98,21 +99,29 @@ class _MyLoginState extends State<MyLogin> {
       jsonData = json.decode(response.body);
       if (jsonData["success"] == "true") {
         sharedPreferences.setString("token", jsonData['token']);
-        try{
-        _getUserData(login);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => MyCart()),
-            (Route<dynamic> route) => false);
-        this.loginSucces = true;
-        } on Exception catch(_){
-          
+        try {
+          _getUserData(login);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (BuildContext context) => MyCart()),
+              (Route<dynamic> route) => false);
+          this.loginSucces = true;
+        } on Exception catch (e) {
+          AlertBox.showAlertDialog(
+              context,
+              "Upss... wystapil problem z nawiazanie polaczenia",
+              e.toString(),
+              "OK");
         }
       } else {
-        //alertbox zle haslo lub login
-        print(response.body);
+        AlertBox.showAlertDialog(context, "Nieudane logowanie",
+            "Nieprawidłowy login lub hasło", "OK");
       }
     }
-    //alertbox problem z nawiazaniem polaczenia
+    AlertBox.showAlertDialog(
+        context,
+        "Upss... wystapil problem z nawiazanie polaczenia",
+        response.statusCode.toString(),
+        "OK");
   }
 
   _getUserData(String login) async {
@@ -125,12 +134,17 @@ class _MyLoginState extends State<MyLogin> {
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
       print("Siema");
-      this.user = new User(login, data["firstName"], data["lastName"], data["email"], data["phoneNumber"],
-          data["userProfilePhotoUrl"], data["blocked"]);
+      this.user = new User(
+          login,
+          data["firstName"],
+          data["lastName"],
+          data["email"],
+          data["phoneNumber"],
+          data["userProfilePhotoUrl"],
+          data["blocked"]);
       print(this.user.getFirstName());
       print(this.user.getLastName());
-    }
-    else{
+    } else {
       throw Exception("Blad polaczenia: " + response.statusCode.toString());
     }
   }
