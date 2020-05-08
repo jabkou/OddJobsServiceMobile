@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/common/constants.dart';
 import 'package:flutterappservice/models/user.dart';
-import 'package:flutterappservice/screens/cart.dart';
+import 'package:flutterappservice/screens/first.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -47,19 +47,8 @@ class _MyLoginState extends State<MyLogin> {
                 'Login:',
                 style: Theme.of(context).textTheme.display4,
               ),
-              TextFormField(
-                controller: _login,
-                decoration: InputDecoration(
-                  hintText: 'Username',
-                ),
-              ),
-              TextFormField(
-                controller: _password,
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                ),
-                obscureText: true,
-              ),
+              _loginFormField(_login, 'Username'),
+              _loginFormField(_password, 'Password', obscureText: true),
               SizedBox(
                 height: 24,
               ),
@@ -67,10 +56,16 @@ class _MyLoginState extends State<MyLogin> {
                 color: Colors.cyan,
                 child: Text('NEXT'),
                 onPressed: () {
-                  // type 'Future<dynamic>' is not a subtype of type 'bool'
-                  this.signIn(_login.text, _password.text);
-                  if (this.loginSucces) {
-                    Navigator.pushReplacementNamed(context, '/catalog');
+                  try {
+                    this._checkData();
+                    this._signIn().catchError((e) => AlertBox.showAlertDialog(
+                        context, "Problem...", e.toString(), "OK"));
+                    if (this.loginSucces) {
+                      Navigator.pushReplacementNamed(context, '/catalog');
+                    }
+                  } on Exception catch (e) {
+                    AlertBox.showAlertDialog(
+                        context, "Problem...", e.toString(), "OK");
                   }
                 },
               )
@@ -81,12 +76,34 @@ class _MyLoginState extends State<MyLogin> {
     );
   }
 
-  signIn(login, password) async {
+  _checkData() {
+    final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
+    if (!alphanumeric.hasMatch(_login.text) ||
+        !alphanumeric.hasMatch(_password.text))
+      throw Exception("Nieprawidłowy znak");
+    if (_password.text.length < 3 || _password.text.length > 30)
+      throw Exception("Nieprawidłowa długość hasła");
+    if (_login.text.length < 3 || _login.text.length > 30)
+      throw Exception("Nieprawidłowa długość loginu");
+  }
+
+  _loginFormField(TextEditingController controller, String text,
+      {obscureText = false}) {
+    return new TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: text,
+      ),
+      obscureText: obscureText,
+    );
+  }
+
+  _signIn() async {
     Map data = {
-      'username': login,
-      'password': password,
+      'username': _login.text,
+      'password': _password.text,
     };
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    //SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var jsonData;
     var response = await http.post(
       loginUrl,
@@ -95,34 +112,21 @@ class _MyLoginState extends State<MyLogin> {
       },
       body: json.encode(data),
     );
-    if (response.statusCode == 200) {
-      jsonData = json.decode(response.body);
-      if (jsonData["success"] == "true") {
-        sharedPreferences.setString("token", jsonData['token']);
-        try {
-          _getUserData(login);
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (BuildContext context) => MyCart()),
-              (Route<dynamic> route) => false);
-          this.loginSucces = true;
-        } on Exception catch (e) {
-          AlertBox.showAlertDialog(
-              context,
-              "Upss... wystapil problem z nawiazanie polaczenia",
-              e.toString(),
-              "OK");
-        }
-      } else {
-        AlertBox.showAlertDialog(context, "Nieudane logowanie",
-            "Nieprawidłowy login lub hasło", "OK");
+    if (response.statusCode != 200)
+      throw Exception(
+          "Upss... wystapil problem z nawiazanie polaczenia\n Kod błędu:" +
+              response.statusCode.toString());
+    jsonData = json.decode(response.body);
+    if (jsonData["success"] == "true") {
+      //sharedPreferences.setString("token", jsonData['token']);
+        await _getUserData(_login.text);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => MyFirst()),
+            (Route<dynamic> route) => false);
+        this.loginSucces = true;
       }
-    }
-    else{
-    AlertBox.showAlertDialog(
-        context,
-        "Upss... wystapil problem z nawiazanie polaczenia",
-        response.statusCode.toString(),
-        "OK");
+     else {
+      throw Exception("Nieprawidłowy login lub hasło");
     }
   }
 
@@ -133,21 +137,16 @@ class _MyLoginState extends State<MyLogin> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-      print("Siema");
-      this.user = new User(
-          login,
-          data["firstName"],
-          data["lastName"],
-          data["email"],
-          data["phoneNumber"],
-          data["userProfilePhotoUrl"],
-          data["blocked"]);
-      print(this.user.getFirstName());
-      print(this.user.getLastName());
-    } else {
+    if (response.statusCode != 200)
       throw Exception("Blad polaczenia: " + response.statusCode.toString());
-    }
+    var data = json.decode(response.body);
+    this.user = new User(
+        login,
+        data["firstName"],
+        data["lastName"],
+        data["email"],
+        data["phoneNumber"],
+        data["userProfilePhotoUrl"],
+        data["blocked"]);
   }
 }
