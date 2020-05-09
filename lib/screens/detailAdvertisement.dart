@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterappservice/models/shortAdvertisementModel.dart';
+import 'package:flutterappservice/models/advertisementModel.dart';
 
 class DetailPage extends StatelessWidget {
-  final ShortAdvertisements advertisement;
+  final Advertisement advertisement;
 
   DetailPage(this.advertisement);
 

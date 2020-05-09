@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterappservice/services/smallAdvertisementsService.dart';
+import 'package:flutterappservice/services/getAdvertisementsService.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 
 import 'detailAdvertisement.dart';
@@ -27,8 +27,8 @@ class MyCatalog extends StatefulWidget {
 }
 
 class _MyCatalog extends State<MyCatalog> {
-  final SmallAdvertisementsService smallAdvertisementsService =
-      SmallAdvertisementsService();
+  final GetAdvertisementsService smallAdvertisementsService =
+      GetAdvertisementsService();
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class _MyCatalog extends State<MyCatalog> {
                           'https://randomuser.me/api/portraits/men/75.jpg'),
                     ),
                     title: Text(snapshot.data[index].title),
-                    subtitle: Text(snapshot.data[index].description),
+                    subtitle: Text(snapshot.data[index].description.toString()),
                     onTap: () {
                       Navigator.push(
                           context,
