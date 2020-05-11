@@ -8,21 +8,18 @@ class NavDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text(
-              'Menu',
-              style: TextStyle(color: Colors.white, fontSize: 25),
-            ),
+            child: Image(image: AssetImage("images/logo.png")),
             decoration: BoxDecoration(
-                color: Colors.cyan,
-                ),
+              color: Colors.cyan,
+            ),
           ),
           ListTile(
-            leading: Icon(Icons.input),
+            leading: Icon(Icons.apps),
             title: Text('Welcome'),
             onTap: () => {Navigator.pushReplacementNamed(context, '/')},
           ),
           ListTile(
-            leading: Icon(Icons.settings),
+            leading: Icon(Icons.input),
             title: Text('Log In'),
             onTap: () => {Navigator.pushReplacementNamed(context, '/login')},
           ),
@@ -32,12 +29,12 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {Navigator.pushReplacementNamed(context, '/register')},
           ),
           ListTile(
-            leading: Icon(Icons.verified_user),
+            leading: Icon(Icons.search),
             title: Text('Looking for job'),
             onTap: () => {Navigator.pushReplacementNamed(context, '/catalog')},
           ),
           ListTile(
-            leading: Icon(Icons.border_color),
+            leading: Icon(Icons.add_circle_outline),
             title: Text('Add job'),
             onTap: () => {Navigator.pushReplacementNamed(context, '/login')},
           ),
