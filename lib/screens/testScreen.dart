@@ -8,6 +8,25 @@ class TestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     this.user = Provider.of<User>(context);
+    String imie, nazwisko, email, numer, user;
+    try{
+      user = this.user.getUserName();
+      imie = this.user.getFirstName();
+      nazwisko = this.user.getLastName();
+      email = this.user.getEmail();
+      numer = this.user.getPhoneNumber();
+    } on Exception catch(e){
+      user = "this.user.getUserName()";
+      imie = "this.user.getFirstName()";
+      nazwisko = "this.user.getLastName()";
+      email = "this.user.getEmail()";
+      numer = "this.user.getPhoneNumber()";
+      print(e.toString());
+      print(this.user.isBlocked());
+      print(this.user.isLogin());
+    }
+
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomPadding: false,
@@ -20,24 +39,19 @@ class TestScreen extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(100.0, 0.0, 100.0, 150.0),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            this.user.getUserName(),
-            style: Theme.of(context).textTheme.display4,
+            user,
           ),
           Text(
-            this.user.getFirstName(),
-            style: Theme.of(context).textTheme.display4,
+            imie,
           ),
           Text(
-            this.user.getLastName(),
-            style: Theme.of(context).textTheme.display4,
+            nazwisko,
           ),
           Text(
-            this.user.getEmail(),
-            style: Theme.of(context).textTheme.display4,
+            email,
           ),
           Text(
-            this.user.getPhoneNumber(),
-            style: Theme.of(context).textTheme.display4,
+            numer,
           ),
         ]),
       ),
