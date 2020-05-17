@@ -14,32 +14,26 @@ class User with ChangeNotifier {
     this._login = false;
   }
   String getUserName() {
-    if (!this._login || this._blocked) throw Exception("blocked or not login");
     return _userName;
   }
 
   String getFirstName() {
-    if (!this._login || this._blocked) throw Exception("blocked or not login");
     return _firstName;
   }
 
   String getLastName() {
-    if (!this._login || this._blocked) throw Exception("blocked or not login");
     return _lastName;
   }
 
   String getEmail() {
-    if (!this._login || this._blocked) throw Exception("blocked or not login");
     return _email;
   }
 
   String getPhoneNumber() {
-    if (!this._login || this._blocked) throw Exception("blocked or not login");
     return _phoneNumber;
   }
 
   List getUserProfilePhotoUrl() {
-    if (!this._login || this._blocked) throw Exception("blocked or not login");
     return _userProfilePhotoUrl;
   }
 
