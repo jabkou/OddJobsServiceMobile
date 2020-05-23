@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutterappservice/screens/cart.dart';
 import 'package:flutterappservice/screens/catalog.dart';
 import 'package:flutterappservice/screens/first.dart';
 import 'package:flutterappservice/screens/login.dart';
+
 import 'package:flutterappservice/screens/register.dart';
 import 'package:flutterappservice/screens/testScreen.dart';
 import 'package:provider/provider.dart';

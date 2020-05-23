@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutterappservice/models/cart.dart';
-import 'package:flutterappservice/models/catalog.dart';
+import 'package:flutterappservice/screens/addAdvertisement.dart';
+import 'package:flutterappservice/services/getAdvertisementsService.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
-import 'package:provider/provider.dart';
 
+import 'detailAdvertisement.dart';
 
-class MyCatalog extends StatelessWidget {
+class Catalog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,85 +14,74 @@ class MyCatalog extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-      ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(child: SizedBox(height: 12)),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-                (context, index) => _MyListItem(index)),
+        actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) =>
+                            AddAdvertisementPage()
+                    )
+                );
+              },
+            ),
           ),
         ],
       ),
+      body: new MyCatalog(),
     );
   }
 }
 
-class _AddButton extends StatelessWidget {
-  final Item item;
-
-  const _AddButton({Key key, @required this.item}) : super(key: key);
+class MyCatalog extends StatefulWidget {
+  MyCatalog();
 
   @override
-  Widget build(BuildContext context) {
-    var cart = Provider.of<CartModel>(context);
-
-    return FlatButton(
-      onPressed: cart.items.contains(item) ? null : () => cart.add(item),
-      splashColor: Theme.of(context).primaryColor,
-      child: cart.items.contains(item)
-          ? Icon(Icons.check, semanticLabel: 'ADDED')
-          : Text('ADD'),
-    );
-  }
+  _MyCatalog createState() => new _MyCatalog();
 }
 
-class _MyAppBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      title: Text('Jobs', style: Theme.of(context).textTheme.display4),
-      floating: true,
-      actions: [
-        IconButton(
-          icon: Icon(Icons.shopping_cart),
-          onPressed: () => Navigator.pushNamed(context, '/cart'),
-        ),
-      ],
-    );
-  }
-}
-
-class _MyListItem extends StatelessWidget {
-  final int index;
-
-  _MyListItem(this.index, {Key key}) : super(key: key);
+class _MyCatalog extends State<MyCatalog> {
+  final GetAdvertisementsService smallAdvertisementsService =
+      GetAdvertisementsService();
 
   @override
   Widget build(BuildContext context) {
-    var catalog = Provider.of<CatalogModel>(context);
-    var item = catalog.getByPosition(index);
-    var textTheme = Theme.of(context).textTheme.title;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: LimitedBox(
-        maxHeight: 48,
-        child: Row(
-          children: [
-            AspectRatio(
-              aspectRatio: 1,
-              child: Container(
-                color: item.color,
-              ),
-            ),
-            SizedBox(width: 24),
-            Expanded(
-              child: Text(item.name, style: textTheme),
-            ),
-            SizedBox(width: 24),
-            _AddButton(item: item),
-          ],
+    return new Scaffold(
+      body: Container(
+        child: FutureBuilder(
+          future: smallAdvertisementsService.getPosts(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.data == null) {
+              return Container(
+                  child: Center(
+                child: Text("Loading..."),
+              ));
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          'https://randomuser.me/api/portraits/men/75.jpg'),
+                    ),
+                    title: Text(snapshot.data[index].title),
+                    subtitle: Text(snapshot.data[index].description.toString()),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailPage(snapshot.data[index])));
+                    },
+                  );
+                },
+              );
+            }
+          },
         ),
       ),
     );
