@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/common/constants.dart';
 import 'package:flutterappservice/models/user.dart';
-import 'package:flutterappservice/screens/testScreen.dart';
+import 'package:flutterappservice/screens/myAccount.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -63,7 +63,7 @@ class _MyLoginState extends State<MyLogin> {
                         context, "Problem...", e.toString(), "OK"));
                     if (this.loginSucces) {
                       print('hello');
-                      Navigator.pushReplacementNamed(context, '/testscreen');
+                      Navigator.pushReplacementNamed(context, '/myAccount');
                     }
                   } on Exception catch (e) {
                     AlertBox.showAlertDialog(
@@ -122,9 +122,9 @@ class _MyLoginState extends State<MyLogin> {
       await _getUserData(_login.text);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  TestScreen()), //zmiana na zalogowany screen
-          (Route<dynamic> route) => false);
+            builder: (BuildContext context) =>
+                MyAccount(),), //zmiana na zalogowany screen
+              (Route<dynamic> route) => false);
       this.loginSucces = true;
     } else {
       _password.clear();

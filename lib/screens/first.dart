@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutterappservice/models/user.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
+import 'package:provider/provider.dart';
 
 class MyFirst extends StatelessWidget {
+  User user;
   @override
   Widget build(BuildContext context) {
+    this.user = Provider.of<User>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       drawer: NavDrawer(),
@@ -28,7 +32,26 @@ class MyFirst extends StatelessWidget {
               Image(image: AssetImage("images/logo.png")),
               SizedBox(height: 80),
               Text(
-                'Welcome! \n What you want to do?\n',
+                'Welcome',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              if(user.isLogin())
+                Text(
+                  user.getFirstName(),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              Text(
+                'What you want to do?\n',
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
@@ -48,7 +71,10 @@ class MyFirst extends StatelessWidget {
                 color: Colors.cyan,
                 child: Text('ADD JOB'),
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/login');
+                  if(!user.isLogin())
+                    Navigator.pushReplacementNamed(context, '/login');
+                  if(user.isLogin())
+                    Navigator.pushReplacementNamed(context, '/myAccount');  //TODO
                 },
               )
             ],
