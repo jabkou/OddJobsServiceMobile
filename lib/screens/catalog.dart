@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterappservice/screens/addAdvertisement.dart';
 import 'package:flutterappservice/services/getAdvertisementsService.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 
@@ -13,6 +14,22 @@ class Catalog extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) =>
+                            AddAdvertisementPage()
+                    )
+                );
+              },
+            ),
+          ),
+        ],
       ),
       body: new MyCatalog(),
     );
