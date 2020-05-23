@@ -25,6 +25,8 @@ class MyFirst extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image(image: AssetImage("images/logo.png")),
+              SizedBox(height: 80),
               Text(
                 'Welcome! \n What you want to do?\n',
                 style: TextStyle(

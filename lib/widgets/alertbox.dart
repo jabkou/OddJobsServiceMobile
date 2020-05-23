@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AlertBox{
-  static showAlertDialog(BuildContext context, String title, String message, String buttonText) {
+    static showAlertDialog(BuildContext context, String title, String message, String buttonText) {
     Widget okButton = FlatButton(
       child: Text(buttonText),
       onPressed: () {
