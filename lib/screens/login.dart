@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/common/constants.dart';
 import 'package:flutterappservice/models/user.dart';
-import 'package:flutterappservice/screens/first.dart';
+import 'package:flutterappservice/screens/testScreen.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../widgets/alertbox.dart';
 
@@ -21,6 +21,7 @@ class _MyLoginState extends State<MyLogin> {
 
   @override
   Widget build(BuildContext context) {
+    this.user = Provider.of<User>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomPadding: false,
@@ -61,7 +62,8 @@ class _MyLoginState extends State<MyLogin> {
                     this._signIn().catchError((e) => AlertBox.showAlertDialog(
                         context, "Problem...", e.toString(), "OK"));
                     if (this.loginSucces) {
-                      Navigator.pushReplacementNamed(context, '/catalog');
+                      print('hello');
+                      Navigator.pushReplacementNamed(context, '/testscreen');
                     }
                   } on Exception catch (e) {
                     AlertBox.showAlertDialog(
@@ -103,7 +105,6 @@ class _MyLoginState extends State<MyLogin> {
       'username': _login.text,
       'password': _password.text,
     };
-    //SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var jsonData;
     var response = await http.post(
       loginUrl,
@@ -118,14 +119,14 @@ class _MyLoginState extends State<MyLogin> {
               response.statusCode.toString());
     jsonData = json.decode(response.body);
     if (jsonData["success"] == "true") {
-      //sharedPreferences.setString("token", jsonData['token']);
-        await _getUserData(_login.text);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => MyFirst()),
-            (Route<dynamic> route) => false);
-        this.loginSucces = true;
-      }
-     else {
+      await _getUserData(_login.text);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  TestScreen()), //zmiana na zalogowany screen
+          (Route<dynamic> route) => false);
+      this.loginSucces = true;
+    } else {
       _password.clear();
       throw Exception("Nieprawidłowy login lub hasło");
     }
@@ -141,13 +142,14 @@ class _MyLoginState extends State<MyLogin> {
     if (response.statusCode != 200)
       throw Exception("Blad polaczenia: " + response.statusCode.toString());
     var data = json.decode(response.body);
-    this.user = new User(
-        login,
-        data["firstName"],
-        data["lastName"],
-        data["email"],
-        data["phoneNumber"],
-        data["userProfilePhotoUrl"],
-        data["blocked"]);
+    this.user.update(
+        userName: login,
+        firstName: data["firstName"],
+        lastName: data["lastName"],
+        email: data["email"],
+        phoneNumber: data["phoneNumber"],
+        userProfilePhotoUrl: data["userProfilePhotoUrl"],
+        blocked: data["blocked"],
+        login: true);
   }
 }
