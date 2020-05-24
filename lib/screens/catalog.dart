@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutterappservice/models/user.dart';
 import 'package:flutterappservice/screens/addAdvertisement.dart';
+import 'package:flutterappservice/screens/login.dart';
 import 'package:flutterappservice/services/getAdvertisementsService.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
+import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'detailAdvertisement.dart';
 
 class Catalog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    User user;
+    user = Provider.of<User>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       drawer: NavDrawer(),
@@ -18,14 +24,30 @@ class Catalog extends StatelessWidget {
           Builder(
             builder: (context) => IconButton(
               icon: Icon(Icons.add),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) =>
-                            AddAdvertisementPage()
-                    )
-                );
+              onPressed: () async {
+                if (user.isLogin()) {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => AddAdvertisementPage()));
+                } else {
+                  await Alert(
+                    context: context,
+                    title: "You need to log in first",
+                    buttons: [
+                      DialogButton(
+                        child: Text(
+                          "Ok",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                        width: 120,
+                      )
+                    ],
+                  ).show();
+                  Navigator.push(context,
+                      new MaterialPageRoute(builder: (context) => MyLogin()));
+                }
               },
             ),
           ),
@@ -44,7 +66,7 @@ class MyCatalog extends StatefulWidget {
 }
 
 class _MyCatalog extends State<MyCatalog> {
-  final GetAdvertisementsService smallAdvertisementsService =
+  final GetAdvertisementsService getAdvertisementsService =
       GetAdvertisementsService();
 
   @override
@@ -52,7 +74,7 @@ class _MyCatalog extends State<MyCatalog> {
     return new Scaffold(
       body: Container(
         child: FutureBuilder(
-          future: smallAdvertisementsService.getPosts(),
+          future: getAdvertisementsService.getPosts(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.data == null) {
               return Container(
@@ -68,8 +90,9 @@ class _MyCatalog extends State<MyCatalog> {
                       backgroundImage: NetworkImage(
                           'https://randomuser.me/api/portraits/men/75.jpg'),
                     ),
-                    title: Text(snapshot.data[index].title),
-                    subtitle: Text(snapshot.data[index].description.toString()),
+                    title: Text(truncate(snapshot.data[index].title, 45)),
+                    subtitle: Text(truncate(snapshot.data[index].description.toString(),80)),
+                    trailing: Text(snapshot.data[index].city+'\n'+snapshot.data[index].reward.toString()+" zł",textAlign: TextAlign.right),
                     onTap: () {
                       Navigator.push(
                           context,
@@ -85,5 +108,11 @@ class _MyCatalog extends State<MyCatalog> {
         ),
       ),
     );
+  }
+  String truncate( String s, int n ){
+    if (s.length <= n) return s;
+    String subString = s.substring(0, n-1);
+    String subString2 = subString.replaceAll(RegExp('\n'), ' ');
+    return subString2+'...';
   }
 }

@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutterappservice/models/user.dart';
+import 'package:flutterappservice/screens/addAdvertisement.dart';
+import 'package:flutterappservice/screens/login.dart';
+import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 
 class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    User user;
+    user = Provider.of<User>(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -36,7 +44,33 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.add_circle_outline),
             title: Text('Add job'),
-            onTap: () => {Navigator.pushReplacementNamed(context, '/login')},
+            onTap: () async {
+              if (user.isLogin()) {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => AddAdvertisementPage()));
+              } else {
+                await Alert(
+                  context: context,
+                  title: "You need to log in first",
+                  buttons: [
+                    DialogButton(
+                      child: Text(
+                        "Ok",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      width: 120,
+                    )
+                  ],
+                ).show();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => MyLogin()));
+              }
+              },
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),

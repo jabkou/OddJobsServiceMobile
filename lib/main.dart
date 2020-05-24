@@ -28,8 +28,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => MyFirst(),
           '/login': (context) => MyLogin(),
-          '/catalog': (context) => MyCatalog(),
-          '/cart': (context) => MyCart(),
+          '/catalog': (context) => Catalog(),
           '/register': (context) => Register(),
           '/testscreen': (context) => TestScreen(),
         },
