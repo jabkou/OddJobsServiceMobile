@@ -13,6 +13,20 @@ List<String> categories = [
   "ANIMALSCARE",
   "GARDENCARE"
 ];
+List<String> cities = [
+  "KRAKOW",
+  "WARSZAWA",
+  "WROCLAW"
+];
+List<String> workingHours = [
+  "HALF_TIME",
+  "FULL_TIME",
+  "TWO_THIRDS_FULL_TIME"
+];
+List<String> contractTypes = [
+  "EMPLOYMENT_CONTRACT",
+  "MANDATORY_CONTRACT",
+];
 
 //TODO - why this don't work, repair and use them everywhere
 Color primaryColor = const Color.fromARGB(255, 66, 165, 245);

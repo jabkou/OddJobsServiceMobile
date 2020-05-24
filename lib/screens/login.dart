@@ -108,9 +108,7 @@ class _MyLoginState extends State<MyLogin> {
     var jsonData;
     var response = await http.post(
       loginUrl,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: user.getHeaders(),
       body: json.encode(data),
     );
     if (response.statusCode != 200)
@@ -119,6 +117,7 @@ class _MyLoginState extends State<MyLogin> {
               response.statusCode.toString());
     jsonData = json.decode(response.body);
     if (jsonData["success"] == "true") {
+      user.update(response: response);
       await _getUserData(_login.text);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
@@ -135,9 +134,7 @@ class _MyLoginState extends State<MyLogin> {
   _getUserData(String login) async {
     var response = await http.get(
       userDataUrl + login,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: user.getHeaders(),
     );
     if (response.statusCode != 200)
       throw Exception("Blad polaczenia: " + response.statusCode.toString());

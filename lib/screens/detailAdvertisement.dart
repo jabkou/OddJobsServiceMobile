@@ -26,6 +26,9 @@ class DetailPage extends StatelessWidget {
                 child: Image.network(
                     ("https://randomuser.me/api/portraits/men/75.jpg"))),
             Container(
+              child: Text(advertisement.city+'\n'+advertisement.category+'\n'+advertisement.contractType+'\n'+advertisement.workingHours+'\n'+advertisement.reward.toString()),
+            ),
+            Container(
               child: Text(advertisement.description),
             )
           ],

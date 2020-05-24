@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 
 class User with ChangeNotifier {
   String _userName;
@@ -9,10 +10,15 @@ class User with ChangeNotifier {
   List _userProfilePhotoUrl; //if they add
   bool _blocked;
   bool _login;
+  Map<String, String> _headers = {
+    'Content-Type': 'application/json; charset=UTF-8',
+  };
+
   User.emptyUser() {
     //named consturctor
     this._login = false;
   }
+
   String getUserName() {
     return _userName;
   }
@@ -37,6 +43,10 @@ class User with ChangeNotifier {
     return _userProfilePhotoUrl;
   }
 
+  Map<String, String> getHeaders() {
+    return _headers;
+  }
+
   bool isBlocked() {
     return _blocked;
   }
@@ -45,15 +55,16 @@ class User with ChangeNotifier {
     return _login;
   }
 
-  void update(
-      {String userName,
-      String firstName,
-      String lastName,
-      String email,
-      String phoneNumber,
-      List userProfilePhotoUrl,
-      bool blocked,
-      bool login}) {
+  void update({String userName,
+    String firstName,
+    String lastName,
+    String email,
+    String phoneNumber,
+    List userProfilePhotoUrl,
+    bool blocked,
+    bool login,
+    http.Response response,
+  }) {
     if (userName != null)
       _userName = userName;
     if (firstName != null)
@@ -70,6 +81,17 @@ class User with ChangeNotifier {
       _blocked = blocked;
     if (login != null)
       _login = login;
-    notifyListeners();
+    if (response != null)
+      updateCookie(response);
+      notifyListeners();
+  }
+
+  void updateCookie(http.Response response) {
+    String rawCookie = response.headers['set-cookie'];
+    if (rawCookie != null) {
+      int index = rawCookie.indexOf(';');
+      _headers['cookie'] =
+      (index == -1) ? rawCookie : rawCookie.substring(0, index);
+    }
   }
 }
