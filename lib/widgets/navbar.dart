@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/models/user.dart';
+
 import 'package:flutterappservice/screens/addAdvertisement.dart';
 import 'package:flutterappservice/screens/login.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:provider/provider.dart';
 
 
 class NavDrawer extends StatelessWidget {
+  User user;
   @override
   Widget build(BuildContext context) {
-    User user;
-    user = Provider.of<User>(context);
+    this.user = Provider.of<User>(context);
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -26,16 +29,24 @@ class NavDrawer extends StatelessWidget {
             title: Text('Welcome'),
             onTap: () => {Navigator.pushReplacementNamed(context, '/')},
           ),
-          ListTile(
-            leading: Icon(Icons.input),
-            title: Text('Log In'),
-            onTap: () => {Navigator.pushReplacementNamed(context, '/login')},
-          ),
-          ListTile(
-            leading: Icon(Icons.add),
-            title: Text('Register'),
-            onTap: () => {Navigator.pushReplacementNamed(context, '/register')},
-          ),
+          if(!user.isLogin())
+            ListTile(
+              leading: Icon(Icons.input),
+              title: Text('Log In'),
+              onTap: () => {Navigator.pushReplacementNamed(context, '/login')},
+            ),
+          if(user.isLogin())
+            ListTile(
+              leading: Icon(Icons.input),
+              title: Text('My account'),
+              onTap: () => {Navigator.pushReplacementNamed(context, '/myAccount')},
+            ),
+          if(!user.isLogin())
+            ListTile(
+              leading: Icon(Icons.add),
+              title: Text('Register'),
+              onTap: () => {Navigator.pushReplacementNamed(context, '/register')},
+            ),
           ListTile(
             leading: Icon(Icons.search),
             title: Text('Looking for job'),
@@ -72,11 +83,12 @@ class NavDrawer extends StatelessWidget {
               }
               },
           ),
-          ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
-            onTap: () => {Navigator.of(context).pop()},
-          ),
+          if(user.isLogin())
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text('Logout'),
+              onTap: () => {Navigator.of(context).pop()},
+            ),
         ],
       ),
     );
