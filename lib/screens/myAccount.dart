@@ -8,13 +8,6 @@ class MyAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     this.user = Provider.of<User>(context);
-    String firstName, lastName, email, phoneNumber, userName;
-    userName = this.user.getUserName();
-    firstName = this.user.getFirstName();
-    lastName = this.user.getLastName();
-    email = this.user.getEmail();
-    phoneNumber = this.user.getPhoneNumber();
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomPadding: false,
@@ -50,7 +43,7 @@ class MyAccount extends StatelessWidget {
               ListTile(
                 title: Text('User name',
                     style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text(userName,
+                subtitle: Text(this.user.getUserName(),
                     style: TextStyle(fontWeight: FontWeight.bold)
                 ),
                 leading: Icon(
@@ -62,7 +55,7 @@ class MyAccount extends StatelessWidget {
               ListTile(
                 title: Text('First name',
                     style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text(firstName,
+                subtitle: Text(this.user.getFirstName(),
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 leading: Icon(
                   Icons.face,
@@ -73,7 +66,7 @@ class MyAccount extends StatelessWidget {
               ListTile(
                 title: Text('Last name',
                     style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text(lastName,
+                subtitle: Text(this.user.getLastName(),
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 leading: Icon(
                   Icons.people,
@@ -84,7 +77,7 @@ class MyAccount extends StatelessWidget {
               ListTile(
                 title: Text('Email',
                     style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text(email,
+                subtitle: Text(this.user.getEmail(),
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 leading: Icon(
                   Icons.contact_mail,
@@ -95,7 +88,7 @@ class MyAccount extends StatelessWidget {
               ListTile(
                 title: Text('Phone number',
                     style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text(phoneNumber,
+                subtitle: Text(this.user.getPhoneNumber(),
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 leading: Icon(
                   Icons.contact_phone,
