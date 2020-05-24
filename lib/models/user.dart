@@ -18,6 +18,18 @@ class User with ChangeNotifier {
     //named consturctor
     this._login = false;
   }
+  logout() {
+    this._login = false;
+    this._blocked = null;
+    this._userName = null;
+    this._firstName = null;
+    this._lastName = null;
+    this._email = null;
+    this._phoneNumber = null;
+    this._userProfilePhotoUrl = null;
+    this._headers = null;
+    notifyListeners();
+  }
 
   String getUserName() {
     return _userName;
@@ -55,7 +67,8 @@ class User with ChangeNotifier {
     return _login;
   }
 
-  void update({String userName,
+  void update({
+    String userName,
     String firstName,
     String lastName,
     String email,
@@ -65,25 +78,16 @@ class User with ChangeNotifier {
     bool login,
     http.Response response,
   }) {
-    if (userName != null)
-      _userName = userName;
-    if (firstName != null)
-      _firstName = firstName;
-    if (lastName != null)
-      _lastName = lastName;
-    if (email != null)
-      _email = email;
-    if (phoneNumber != null)
-      _phoneNumber = phoneNumber;
-    if (userProfilePhotoUrl != null)
-      _userProfilePhotoUrl = userProfilePhotoUrl;
-    if (blocked != null)
-      _blocked = blocked;
-    if (login != null)
-      _login = login;
-    if (response != null)
-      updateCookie(response);
-      notifyListeners();
+    if (userName != null) _userName = userName;
+    if (firstName != null) _firstName = firstName;
+    if (lastName != null) _lastName = lastName;
+    if (email != null) _email = email;
+    if (phoneNumber != null) _phoneNumber = phoneNumber;
+    if (userProfilePhotoUrl != null) _userProfilePhotoUrl = userProfilePhotoUrl;
+    if (blocked != null) _blocked = blocked;
+    if (login != null) _login = login;
+    if (response != null) updateCookie(response);
+    notifyListeners();
   }
 
   void updateCookie(http.Response response) {
@@ -91,7 +95,7 @@ class User with ChangeNotifier {
     if (rawCookie != null) {
       int index = rawCookie.indexOf(';');
       _headers['cookie'] =
-      (index == -1) ? rawCookie : rawCookie.substring(0, index);
+          (index == -1) ? rawCookie : rawCookie.substring(0, index);
     }
   }
 }
