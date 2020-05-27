@@ -1,16 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/common/constants.dart';
 import 'package:flutterappservice/services/addAdvertisementsService.dart';
-import 'package:flutterappservice/widgets/alertbox.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../models/user.dart';
-
 
 class AddAdvertisementPage extends StatefulWidget {
   @override
@@ -18,7 +14,8 @@ class AddAdvertisementPage extends StatefulWidget {
 }
 
 class _AddAdvertisementPage extends State<AddAdvertisementPage> {
-  AddAdvertisementsService addAdvertisementsService = new AddAdvertisementsService();
+  AddAdvertisementsService addAdvertisementsService =
+      new AddAdvertisementsService();
   final TextEditingController title = new TextEditingController();
   final TextEditingController description = new TextEditingController();
   final TextEditingController reward = new TextEditingController();
@@ -182,7 +179,6 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
                     },
                   ),
                   textFormField(reward, 'Reward'),
-
                   SizedBox(
                     height: 24,
                   ),
@@ -191,7 +187,15 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
                     child: Text('Add'),
                     onPressed: () async {
                       try {
-                        addAdvertisementsService.addAdvertisement(user, title.text, description.text, category, city, workingHour, contractType, reward.text);
+                        await addAdvertisementsService.addAdvertisement(
+                            user,
+                            title.text,
+                            description.text,
+                            category,
+                            city,
+                            workingHour,
+                            contractType,
+                            reward.text);
                         await Alert(
                           context: context,
                           title: "New advertisement added",
@@ -199,7 +203,8 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
                             DialogButton(
                               child: Text(
                                 "Ok",
-                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
                               ),
                               onPressed: () => Navigator.pop(context),
                               width: 120,
@@ -207,10 +212,23 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
                           ],
                         ).show();
                         Navigator.pushReplacementNamed(context, '/catalog');
-
                       } catch (e) {
-                        AlertBox.showAlertDialog(
-                            context, "Upss... There is problem\n", e.toString(), "OK");
+                        await Alert(
+                          context: context,
+                          title: "Upss... There is problem",
+                          desc: e.toString().substring(11),
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Ok",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              width: 120,
+                            )
+                          ],
+                        ).show();
                       }
                     },
                   ),
@@ -223,7 +241,8 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
     );
   }
 
-  textFormField(TextEditingController controller, String text, {maxLines = 1, obscureText = false}) {
+  textFormField(TextEditingController controller, String text,
+      {maxLines = 1, obscureText = false}) {
     return new TextFormField(
       controller: controller,
       maxLines: maxLines,
@@ -236,7 +255,7 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
 
   //todo - it wont change value of parameters!!!? flutter dont support that!?
   //create mutable object is only way?
-  chooseFormField(String value, String name, List<String> list){
+  chooseFormField(String value, String name, List<String> list) {
     return new FormField<String>(
       builder: (FormFieldState<String> state) {
         return InputDecorator(
@@ -266,7 +285,7 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
         );
       },
       validator: (val) {
-        return val != '' ? null : 'Please select a '+name;
+        return val != '' ? null : 'Please select a ' + name;
       },
     );
   }
