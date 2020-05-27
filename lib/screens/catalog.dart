@@ -8,8 +8,20 @@ import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'detailAdvertisement.dart';
+import 'filterAdvertisements.dart';
 
+// ignore: must_be_immutable
 class Catalog extends StatelessWidget {
+  String city;
+  String category;
+  String workingHour;
+  String contractType;
+
+  Catalog({this.city, this.category, this.workingHour, this.contractType});
+
+  final GetAdvertisementsService getAdvertisementsService =
+      GetAdvertisementsService();
+
   @override
   Widget build(BuildContext context) {
     User user;
@@ -21,6 +33,17 @@ class Catalog extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.filter_vintage),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => FilterAdvertisementPage()));
+              },
+            ),
+          ),
           Builder(
             builder: (context) => IconButton(
               icon: Icon(Icons.add),
@@ -42,7 +65,7 @@ class Catalog extends StatelessWidget {
                         ),
                         onPressed: () => Navigator.pop(context),
                         width: 120,
-                      )
+                      ),
                     ],
                   ).show();
                   Navigator.push(context,
@@ -50,31 +73,16 @@ class Catalog extends StatelessWidget {
                 }
               },
             ),
-          ),
+          )
         ],
       ),
-      body: new MyCatalog(),
-    );
-  }
-}
-
-class MyCatalog extends StatefulWidget {
-  MyCatalog();
-
-  @override
-  _MyCatalog createState() => new _MyCatalog();
-}
-
-class _MyCatalog extends State<MyCatalog> {
-  final GetAdvertisementsService getAdvertisementsService =
-      GetAdvertisementsService();
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
       body: Container(
         child: FutureBuilder(
-          future: getAdvertisementsService.getPosts(),
+          future: getAdvertisementsService.getPosts(
+              city: this.city,
+              advertisementCategory: this.category,
+              workingHours: this.workingHour,
+              contractType: this.contractType),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.data == null) {
               return Container(
@@ -91,8 +99,14 @@ class _MyCatalog extends State<MyCatalog> {
                           'https://randomuser.me/api/portraits/men/75.jpg'),
                     ),
                     title: Text(truncate(snapshot.data[index].title, 45)),
-                    subtitle: Text(truncate(snapshot.data[index].description.toString(),80)),
-                    trailing: Text(snapshot.data[index].city+'\n'+snapshot.data[index].reward.toString()+" zł",textAlign: TextAlign.right),
+                    subtitle: Text(truncate(
+                        snapshot.data[index].description.toString(), 80)),
+                    trailing: Text(
+                        snapshot.data[index].city +
+                            '\n' +
+                            snapshot.data[index].reward.toString() +
+                            " zł",
+                        textAlign: TextAlign.right),
                     onTap: () {
                       Navigator.push(
                           context,
@@ -109,10 +123,11 @@ class _MyCatalog extends State<MyCatalog> {
       ),
     );
   }
-  String truncate( String s, int n ){
+
+  String truncate(String s, int n) {
     if (s.length <= n) return s;
-    String subString = s.substring(0, n-1);
+    String subString = s.substring(0, n - 1);
     String subString2 = subString.replaceAll(RegExp('\n'), ' ');
-    return subString2+'...';
+    return subString2 + '...';
   }
 }
