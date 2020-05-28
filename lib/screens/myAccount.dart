@@ -7,7 +7,7 @@ class MyAccount extends StatelessWidget {
   User user;
   @override
   Widget build(BuildContext context) {
-    this.user = Provider.of<User>(context);
+    this.user = Provider.of<User>(context, listen: false);//jest dany false bo jak sie wylogowywalem to wywalalo ze widget Text dostaje nulla bo lecial update do wszystkich sluchaczy
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomPadding: false,
