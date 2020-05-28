@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutterappservice/common/constants.dart';
 import 'package:flutterappservice/exceptions/diffPasswordException.dart';
 import 'package:flutterappservice/models/user.dart';
 import 'package:flutterappservice/screens/myAccount.dart';
 import 'package:flutterappservice/services/loginService.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'dart:convert';
 import '../widgets/alertbox.dart';
 
 class MyLogin extends StatefulWidget {
