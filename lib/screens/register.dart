@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutterappservice/common/constants.dart';
+import 'package:flutterappservice/exceptions/diffPasswordException.dart';
 import 'package:flutterappservice/screens/login.dart';
+import 'package:flutterappservice/services/registerService.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import '../widgets/alertbox.dart';
 
 class Register extends StatefulWidget {
@@ -19,6 +18,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController _firstName = new TextEditingController();
   final TextEditingController _lastName = new TextEditingController();
   final TextEditingController _phoneNumber = new TextEditingController();
+  RegisterService registerService = new RegisterService();
   bool succRegister = false;
 
   @override
@@ -65,14 +65,27 @@ class _RegisterState extends State<Register> {
                   RaisedButton(
                     color: Colors.cyan,
                     child: Text('REGISTER'),
-                    onPressed: () {
+                    onPressed: () async {
                       try {
-                        _checkData();
-                        _register();
-                        if (this.succRegister) {
-                          Navigator.pushReplacementNamed(context, '/login');
-                        }
-                      } on Exception catch (e) {
+                        await registerService.register(
+                            _username.text,
+                            _password.text,
+                            _email.text,
+                            _firstName.text,
+                            _lastName.text,
+                            _phoneNumber.text,
+                            _confirmPassword.text);
+                        Navigator.pushReplacementNamed(context, '/login');
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => MyLogin()),
+                            (Route<dynamic> route) => false);
+                      } on DiffPasswordException catch(e){
+                        _password.clear();
+                        _confirmPassword.clear();
+                        AlertBox.showAlertDialog(
+                            context, "Problem...", e.toString(), "OK");
+                      }on Exception catch (e) {
                         AlertBox.showAlertDialog(
                             context, "Problem...", e.toString(), "OK");
                       }
@@ -87,38 +100,6 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  _checkData() {
-    _confPasswords();
-    final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
-    final nameregex = RegExp(r"^[a-zA-Z]+$");
-    //final passwordRegex = RegExp(r'[^\s]+');
-    final emailRegex =
-        RegExp(r"^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
-    final phonRegex = RegExp(r"^[0-9]+$");
-    if (!alphanumeric.hasMatch(_username.text) ||
-        !alphanumeric.hasMatch(_password.text))
-      throw Exception("Nieprawidłowy znak");
-    if (_password.text.length < 3 || _password.text.length > 70)
-      throw Exception("Nieprawidłowa długość hasła");
-    if (_username.text.length < 3 || _username.text.length > 30)
-      throw Exception("Nieprawidłowa długość loginu");
-    if (!emailRegex.hasMatch(_email.text)) throw Exception("Błędny email");
-    if (!phonRegex.hasMatch(_phoneNumber.text) || _phoneNumber.text.length != 9)
-      throw Exception("Błędny numer");
-    if(!nameregex.hasMatch(_firstName.text) || _firstName.text.length < 3 ||_firstName.text.length > 30)
-      throw Exception("Błędne imie");
-    if(!nameregex.hasMatch(_lastName.text) || _lastName.text.length < 3 ||_lastName.text.length > 30)
-      throw Exception("Błędne nazwisko");
-  }
-
-  _confPasswords() {
-    if (!(_password.text == _confirmPassword.text)) {
-      _password.clear();
-      _confirmPassword.clear();
-      throw Exception("Podane hasła nie są takie same");
-    }
-  }
-
   _registerFormField(TextEditingController controller, String text,
       {obscureText = false}) {
     return new TextFormField(
@@ -128,38 +109,5 @@ class _RegisterState extends State<Register> {
       ),
       obscureText: obscureText,
     );
-  }
-
-  _register() async {
-    Map data = {
-      "firstName": _firstName.text,
-      "lastName": _lastName.text,
-      "username": _username.text,
-      "email": _email.text,
-      "password": _password.text,
-      "phoneNumber": _phoneNumber.text,
-    };
-    var jsonData;
-    var response = await http.post(
-      registerUrl,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: json.encode(data),
-    );
-    if (response.statusCode != 200)
-      throw Exception(
-          "Upss... wystapil problem z nawiazanie polaczenia\n Kod błędu: " +
-              response.statusCode.toString());
-
-    jsonData = json.decode(response.body);
-    if (jsonData.length == 0) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => MyLogin()),
-          (Route<dynamic> route) => false);
-      this.succRegister = true;
-    } else {
-      throw Exception(response.body);
-    }
   }
 }
