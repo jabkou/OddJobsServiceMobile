@@ -27,7 +27,9 @@ class User with ChangeNotifier {
     this._email = null;
     this._phoneNumber = null;
     this._userProfilePhotoUrl = null;
-    this._headers = null;
+    this._headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
     notifyListeners();
   }
 

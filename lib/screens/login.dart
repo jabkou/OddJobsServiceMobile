@@ -56,13 +56,11 @@ class _MyLoginState extends State<MyLogin> {
               RaisedButton(
                 color: Colors.cyan,
                 child: Text('NEXT'),
-                onPressed: () {
+                onPressed: () async {
                   try {
                     this._checkData();
-                    this._signIn().catchError((e) => AlertBox.showAlertDialog(
-                        context, "Problem...", e.toString(), "OK"));
+                    await this._signIn();
                     if (this.loginSucces) {
-                      print('hello');
                       Navigator.pushReplacementNamed(context, '/myAccount');
                     }
                   } on Exception catch (e) {
