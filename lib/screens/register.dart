@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/common/constants.dart';
 import 'package:flutterappservice/screens/login.dart';
@@ -76,7 +74,7 @@ class _RegisterState extends State<Register> {
                         }
                       } on Exception catch (e) {
                         AlertBox.showAlertDialog(
-                            context, "Różne hasła", e.toString(), "OK");
+                            context, "Problem...", e.toString(), "OK");
                       }
                     },
                   ),
