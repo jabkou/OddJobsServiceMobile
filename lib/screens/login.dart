@@ -63,7 +63,7 @@ class _MyLoginState extends State<MyLogin> {
                         context, "Problem...", e.toString(), "OK"));
                     if (this.loginSucces) {
                       print('hello');
-                      Navigator.pushReplacementNamed(context, '/myAccount');
+                      Navigator.pop(context);
                     }
                   } on Exception catch (e) {
                     AlertBox.showAlertDialog(
@@ -119,11 +119,6 @@ class _MyLoginState extends State<MyLogin> {
     if (jsonData["success"] == "true") {
       user.update(response: response);
       await _getUserData(_login.text);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (BuildContext context) =>
-                MyAccount(),), //zmiana na zalogowany screen
-              (Route<dynamic> route) => false);
       this.loginSucces = true;
     } else {
       _password.clear();

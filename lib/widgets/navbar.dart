@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutterappservice/models/user.dart';
 
 import 'package:flutterappservice/screens/addAdvertisement.dart';
+import 'package:flutterappservice/screens/catalog.dart';
+import 'package:flutterappservice/screens/first.dart';
 import 'package:flutterappservice/screens/login.dart';
+import 'package:flutterappservice/screens/myAccount.dart';
+import 'package:flutterappservice/screens/register.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:provider/provider.dart';
@@ -27,30 +31,45 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.apps),
             title: Text('Welcome'),
-            onTap: () => {Navigator.pushReplacementNamed(context, '/')},
+            onTap: () => {Navigator.push(
+            context,
+            new MaterialPageRoute(
+            builder: (context) => MyFirst()))},
           ),
           if(!user.isLogin())
             ListTile(
               leading: Icon(Icons.input),
               title: Text('Log In'),
-              onTap: () => {Navigator.pushReplacementNamed(context, '/login')},
+              onTap: () => {Navigator.push(
+              context,
+              new MaterialPageRoute(
+              builder: (context) => MyLogin()))},
             ),
           if(user.isLogin())
             ListTile(
               leading: Icon(Icons.input),
               title: Text('My account'),
-              onTap: () => {Navigator.pushReplacementNamed(context, '/myAccount')},
+              onTap: () => {Navigator.push(
+              context,
+              new MaterialPageRoute(
+              builder: (context) => MyAccount()))},
             ),
           if(!user.isLogin())
             ListTile(
               leading: Icon(Icons.add),
               title: Text('Register'),
-              onTap: () => {Navigator.pushReplacementNamed(context, '/register')},
+              onTap: () => {Navigator.push(
+              context,
+              new MaterialPageRoute(
+              builder: (context) => Register()))},
             ),
           ListTile(
             leading: Icon(Icons.search),
             title: Text('Looking for job'),
-            onTap: () => {Navigator.pushReplacementNamed(context, '/catalog')},
+            onTap: () => {Navigator.push(
+            context,
+            new MaterialPageRoute(
+            builder: (context) => Catalog()))},
           ),
           ListTile(
             leading: Icon(Icons.add_circle_outline),
@@ -76,6 +95,10 @@ class NavDrawer extends StatelessWidget {
                     )
                   ],
                 ).show();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => AddAdvertisementPage()));
                 Navigator.push(
                     context,
                     new MaterialPageRoute(
