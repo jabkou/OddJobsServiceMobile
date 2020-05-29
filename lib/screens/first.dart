@@ -71,7 +71,7 @@ class MyFirst extends StatelessWidget {
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
-                          builder: (context) => MyCatalog()));
+                          builder: (context) => Catalog()));
                 },
               ),
               RaisedButton(

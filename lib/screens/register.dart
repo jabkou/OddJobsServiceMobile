@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/common/constants.dart';
+import 'package:flutterappservice/screens/first.dart';
 import 'package:flutterappservice/screens/login.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:http/http.dart' as http;
@@ -72,7 +73,14 @@ class _RegisterState extends State<Register> {
                         _checkData();
                         _register();
                         if (this.succRegister) {
-                          Navigator.pushReplacementNamed(context, '/login');
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => MyFirst()));
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => MyLogin()));
                         }
                       } on Exception catch (e) {
                         AlertBox.showAlertDialog(
@@ -156,9 +164,6 @@ class _RegisterState extends State<Register> {
 
     jsonData = json.decode(response.body);
     if (jsonData.length == 0) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => MyLogin()),
-          (Route<dynamic> route) => false);
       this.succRegister = true;
     } else {
       throw Exception(response.body);
