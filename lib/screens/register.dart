@@ -6,6 +6,7 @@ import 'package:flutterappservice/screens/first.dart';
 import 'package:flutterappservice/screens/login.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:http/http.dart' as http;
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:convert';
 import '../widgets/alertbox.dart';
 
@@ -68,11 +69,25 @@ class _RegisterState extends State<Register> {
                   RaisedButton(
                     color: Colors.cyan,
                     child: Text('REGISTER'),
-                    onPressed: () {
+                    onPressed: ()  async {
                       try {
                         _checkData();
                         _register();
                         if (this.succRegister) {
+                          await Alert(
+                              context: context,
+                              title: "You have been registered!",
+                      buttons: [
+                      DialogButton(
+                      child: Text(
+                      "Ok",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      width: 120,
+                      )
+                      ],
+                      ).show();
                           Navigator.push(
                               context,
                               new MaterialPageRoute(
@@ -83,8 +98,20 @@ class _RegisterState extends State<Register> {
                                   builder: (context) => MyLogin()));
                         }
                       } on Exception catch (e) {
-                        AlertBox.showAlertDialog(
-                            context, "Różne hasła", e.toString(), "OK");
+                         await Alert(
+                          context: context,
+                          title: e.toString().substring(10),
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Ok",
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              width: 120,
+                            )
+                          ],
+                        ).show();
                       }
                     },
                   ),

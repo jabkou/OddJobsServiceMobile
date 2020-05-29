@@ -4,6 +4,7 @@ import 'package:flutterappservice/screens/catalog.dart';
 import 'package:flutterappservice/screens/login.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'addAdvertisement.dart';
 
@@ -77,8 +78,22 @@ class MyFirst extends StatelessWidget {
               RaisedButton(
                 color: Colors.cyan,
                 child: Text('ADD JOB'),
-                onPressed: () {
-                  if(!user.isLogin())
+                onPressed: () async {
+                  if(!user.isLogin()) {
+                    await Alert(
+                        context: context,
+                        title: "You need to log in first",
+                        buttons: [
+                        DialogButton(
+                        child: Text(
+                        "Ok",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  width: 120,
+                  )
+                  ],
+                  ).show();
                     Navigator.push(
                         context,
                         new MaterialPageRoute(
@@ -87,6 +102,7 @@ class MyFirst extends StatelessWidget {
                         context,
                         new MaterialPageRoute(
                             builder: (context) => MyLogin()));
+                  }
                   if(user.isLogin())
                     Navigator.push(
                         context,

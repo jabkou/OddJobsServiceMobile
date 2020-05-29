@@ -5,6 +5,7 @@ import 'package:flutterappservice/screens/myAccount.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:convert';
 import '../widgets/alertbox.dart';
 
@@ -56,18 +57,55 @@ class _MyLoginState extends State<MyLogin> {
               RaisedButton(
                 color: Colors.cyan,
                 child: Text('NEXT'),
-                onPressed: () {
+                onPressed: () async {
                   try {
                     this._checkData();
-                    this._signIn().catchError((e) => AlertBox.showAlertDialog(
-                        context, "Problem...", e.toString(), "OK"));
+                    this._signIn().catchError((e) async => await Alert(
+                      context: context,
+                      title: e.toString().substring(10),
+                      buttons: [
+                        DialogButton(
+                          child: Text(
+                            "Ok",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          width: 120,
+                        )
+                      ],
+                    ).show());
                     if (this.loginSucces) {
-                      print('hello');
+                      await Alert(
+                          context: context,
+                          title: "You have been logged in",
+                          buttons: [
+                          DialogButton(
+                          child: Text(
+                          "Ok",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  width: 120,
+                  )
+                  ],
+                  ).show();
                       Navigator.pop(context);
                     }
                   } on Exception catch (e) {
-                    AlertBox.showAlertDialog(
-                        context, "Problem...", e.toString(), "OK");
+                    await Alert(
+                      context: context,
+                      title: e.toString(),
+                      buttons: [
+                        DialogButton(
+                          child: Text(
+                            "Ok",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          width: 120,
+                        )
+                      ],
+                    ).show();
                   }
                 },
               )

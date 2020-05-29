@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterappservice/screens/MyOffers.dart';
 import 'package:flutterappservice/screens/catalog.dart';
 import 'package:flutterappservice/screens/first.dart';
 import 'package:flutterappservice/screens/login.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
           '/catalog': (context) => Catalog(),
           '/register': (context) => Register(),
           '/myAccount': (context) => MyAccount(),
+          '/myOffers': (context) => Offers(),
         },
       ),
     );

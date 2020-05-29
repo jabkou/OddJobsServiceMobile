@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/models/user.dart';
+import 'package:flutterappservice/screens/MyOffers.dart';
 
 import 'package:flutterappservice/screens/addAdvertisement.dart';
 import 'package:flutterappservice/screens/catalog.dart';
@@ -53,6 +54,15 @@ class NavDrawer extends StatelessWidget {
               context,
               new MaterialPageRoute(
               builder: (context) => MyAccount()))},
+            ),
+          if(user.isLogin())
+            ListTile(
+              leading: Icon(Icons.clear_all),
+              title: Text('My Offers'),
+              onTap: () => {Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => Offers()))},
             ),
           if(!user.isLogin())
             ListTile(
