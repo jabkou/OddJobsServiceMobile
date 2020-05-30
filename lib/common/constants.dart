@@ -7,6 +7,8 @@ final String loginUrl = "http://149.156.146.249:60021/api/login";
 final String userDataUrl = "http://149.156.146.249:60021/api/users/";
 final String advertisementsURL =
     "http://149.156.146.249:60021/api/advertisements";
+final String reportAdvertisementsURL =
+    "http://149.156.146.249:60021/api/reported";
 
 List<String> categories = ["HOUSEWORK", "ANIMALSCARE", "GARDENCARE"];
 List<String> cities = ["KRAKOW", "WARSZAWA", "WROCLAW"];
@@ -16,20 +18,20 @@ List<String> contractTypes = [
   "MANDATORY_CONTRACT",
 ];
 List<String> emptyCategories = [
-  "EMPTY",
+  "",
   "HOUSEWORK",
   "ANIMALSCARE",
   "GARDENCARE"
 ];
-List<String> emptyCities = ["EMPTY", "KRAKOW", "WARSZAWA", "WROCLAW"];
+List<String> emptyCities = ["", "KRAKOW", "WARSZAWA", "WROCLAW"];
 List<String> emptyWorkingHours = [
-  "EMPTY",
+  "",
   "HALF_TIME",
   "FULL_TIME",
   "TWO_THIRDS_FULL_TIME"
 ];
 List<String> emptyContractTypes = [
-  "EMPTY",
+  "",
   "EMPLOYMENT_CONTRACT",
   "MANDATORY_CONTRACT",
 ];

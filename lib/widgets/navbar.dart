@@ -5,7 +5,6 @@ import 'package:flutterappservice/screens/addAdvertisement.dart';
 import 'package:flutterappservice/screens/login.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:provider/provider.dart';
 
 
 class NavDrawer extends StatelessWidget {
