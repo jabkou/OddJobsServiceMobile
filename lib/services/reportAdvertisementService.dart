@@ -26,7 +26,7 @@ class ReportAdvertisementsService {
       "advertisement": advertisement,
       "description": description
     };
-    print(data);
+
     var response = await http.post(reportAdvertisementsURL,
         headers: user.getHeaders(), body: json.encode(data));
     user.update(response: response);

@@ -92,7 +92,7 @@ class NavDrawer extends StatelessWidget {
                 try {
                   await logoutService.logoutUser(user);
                   Navigator.of(context).pop();
-                  Navigator.pushReplacementNamed(context, '/login');
+                  Navigator.pushReplacementNamed(context, '/');
                 } on Exception catch (e) {
                   await Alert(
                   context: context,
