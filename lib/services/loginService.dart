@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
 class LoginService {
-    _checkData(String login, String password) {
+  _checkData(String login, String password) {
     final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
     if (!alphanumeric.hasMatch(login) ||
         !alphanumeric.hasMatch(password))
@@ -15,7 +15,8 @@ class LoginService {
     if (login.length < 3 || login.length > 30)
       throw Exception("Nieprawidłowa długość loginu");
   }
-    signIn(User user, String login, String password) async {
+
+  signIn(User user, String login, String password) async {
     _checkData(login, password);
     Map data = {
       'username': login,
@@ -34,13 +35,14 @@ class LoginService {
     jsonData = json.decode(response.body);
     if (jsonData["success"] == "true") {
       user.update(response: response);
-      await _getUserData(user, login);
+      await getUserData(user, login);
     } else {
       throw DiffPasswordException("Nieprawidłowy login lub hasło");
     }
   }
 
-  _getUserData(User user, String login) async {
+  getUserData(User user, String login) async {
+
     var response = await http.get(
       userDataUrl + login,
       headers: user.getHeaders(),

@@ -40,7 +40,7 @@ class _RegisterState extends State<Register> {
           ),
         ),
         child: Container(
-          padding: EdgeInsets.fromLTRB(80.0, 30.0, 80.0, 100.0),
+          padding: EdgeInsets.fromLTRB(80.0, 80.0, 80.0, 100.0),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(

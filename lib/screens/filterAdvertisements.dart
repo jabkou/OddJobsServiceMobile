@@ -1,24 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/common/constants.dart';
-import 'package:flutterappservice/services/addAdvertisementsService.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
-import 'package:provider/provider.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
-import '../models/user.dart';
+import 'catalog.dart';
 
-class AddAdvertisementPage extends StatefulWidget {
+class FilterAdvertisementPage extends StatefulWidget {
   @override
-  _AddAdvertisementPage createState() => _AddAdvertisementPage();
+  _FilterAdvertisementPage createState() => _FilterAdvertisementPage();
 }
 
-class _AddAdvertisementPage extends State<AddAdvertisementPage> {
-  AddAdvertisementsService addAdvertisementsService =
-      new AddAdvertisementsService();
-  final TextEditingController title = new TextEditingController();
-  final TextEditingController description = new TextEditingController();
-  final TextEditingController reward = new TextEditingController();
+class _FilterAdvertisementPage extends State<FilterAdvertisementPage> {
   String city;
   String category;
   String workingHour;
@@ -26,9 +18,6 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
 
   @override
   Widget build(BuildContext context) {
-    User user;
-    user = Provider.of<User>(context);
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       drawer: NavDrawer(),
@@ -46,7 +35,7 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
           ),
         ),
         child: Container(
-          padding: EdgeInsets.fromLTRB(40.0, 80.0, 40.0, 100.0),
+          padding: EdgeInsets.fromLTRB(40.0, 100.0, 40.0, 100.0),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(
@@ -54,11 +43,9 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Add new Advertisement:',
+                    'Filtering Advertisements:',
                     style: Theme.of(context).textTheme.display4,
                   ),
-                  textFormField(title, 'Title'),
-                  textFormField(description, 'Description', maxLines: 10),
                   new FormField<String>(
                     builder: (FormFieldState<String> state) {
                       return InputDecorator(
@@ -77,7 +64,7 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
                                 state.didChange(newValue);
                               });
                             },
-                            items: cities.map((String value) {
+                            items: emptyCities.map((String value) {
                               return new DropdownMenuItem<String>(
                                 value: value,
                                 child: new Text(value),
@@ -106,7 +93,7 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
                                 state.didChange(newValue);
                               });
                             },
-                            items: categories.map((String value) {
+                            items: emptyCategories.map((String value) {
                               return new DropdownMenuItem<String>(
                                 value: value,
                                 child: new Text(value),
@@ -135,7 +122,7 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
                                 state.didChange(newValue);
                               });
                             },
-                            items: workingHours.map((String value) {
+                            items: emptyWorkingHours.map((String value) {
                               return new DropdownMenuItem<String>(
                                 value: value,
                                 child: new Text(value),
@@ -167,7 +154,7 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
                                 state.didChange(newValue);
                               });
                             },
-                            items: contractTypes.map((String value) {
+                            items: emptyContractTypes.map((String value) {
                               return new DropdownMenuItem<String>(
                                 value: value,
                                 child: new Text(value),
@@ -178,58 +165,21 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
                       );
                     },
                   ),
-                  textFormField(reward, 'Reward'),
                   SizedBox(
                     height: 24,
                   ),
                   RaisedButton(
                     color: Colors.cyan,
-                    child: Text('Add'),
+                    child: Text('Show Advertisements'),
                     onPressed: () async {
-                      try {
-                        await addAdvertisementsService.addAdvertisement(
-                            user,
-                            title.text,
-                            description.text,
-                            category,
-                            city,
-                            workingHour,
-                            contractType,
-                            reward.text);
-                        await Alert(
-                          context: context,
-                          title: "New advertisement added",
-                          buttons: [
-                            DialogButton(
-                              child: Text(
-                                "Ok",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                              width: 120,
-                            )
-                          ],
-                        ).show();
-                        Navigator.pushReplacementNamed(context, '/catalog');
-                      } catch (e) {
-                        await Alert(
-                          context: context,
-                          title: "Upss... There is problem",
-                          desc: e.toString().substring(11),
-                          buttons: [
-                            DialogButton(
-                              child: Text(
-                                "Ok",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                              width: 120,
-                            )
-                          ],
-                        ).show();
-                      }
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => Catalog(
+                                  workingHour: workingHour,
+                                  contractType: contractType,
+                                  city: city,
+                                  category: category)));
                     },
                   ),
                 ],
@@ -238,55 +188,6 @@ class _AddAdvertisementPage extends State<AddAdvertisementPage> {
           ),
         ),
       ),
-    );
-  }
-
-  textFormField(TextEditingController controller, String text,
-      {maxLines = 1, obscureText = false}) {
-    return new TextFormField(
-      controller: controller,
-      maxLines: maxLines,
-      decoration: InputDecoration(
-        hintText: text,
-      ),
-      obscureText: obscureText,
-    );
-  }
-
-  //todo - it wont change value of parameters!!!? flutter dont support that!?
-  //create mutable object is only way?
-  chooseFormField(String value, String name, List<String> list) {
-    return new FormField<String>(
-      builder: (FormFieldState<String> state) {
-        return InputDecorator(
-          decoration: InputDecoration(
-            labelText: name,
-            errorText: state.hasError ? state.errorText : null,
-          ),
-          isEmpty: value == '',
-          child: new DropdownButtonHideUnderline(
-            child: new DropdownButton<String>(
-              value: value,
-              isDense: true,
-              onChanged: (String newValue) {
-                setState(() {
-                  value = newValue;
-                  state.didChange(newValue);
-                });
-              },
-              items: list.map((String value) {
-                return new DropdownMenuItem<String>(
-                  value: value,
-                  child: new Text(value),
-                );
-              }).toList(),
-            ),
-          ),
-        );
-      },
-      validator: (val) {
-        return val != '' ? null : 'Please select a ' + name;
-      },
     );
   }
 }
