@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutterappservice/common/constants.dart';
+import 'package:flutterappservice/exceptions/diffPasswordException.dart';
 import 'package:flutterappservice/models/user.dart';
 import 'package:flutterappservice/screens/myAccount.dart';
+import 'package:flutterappservice/services/loginService.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'dart:convert';
 import '../widgets/alertbox.dart';
 
 class MyLogin extends StatefulWidget {
@@ -16,8 +15,8 @@ class MyLogin extends StatefulWidget {
 class _MyLoginState extends State<MyLogin> {
   final TextEditingController _login = new TextEditingController();
   final TextEditingController _password = new TextEditingController();
+  LoginService loginService = new LoginService();
   User user;
-  bool loginSucces = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,15 +55,19 @@ class _MyLoginState extends State<MyLogin> {
               RaisedButton(
                 color: Colors.cyan,
                 child: Text('NEXT'),
-                onPressed: () {
+                onPressed: () async {
                   try {
-                    this._checkData();
-                    this._signIn().catchError((e) => AlertBox.showAlertDialog(
-                        context, "Problem...", e.toString(), "OK"));
-                    if (this.loginSucces) {
-                      print('hello');
-                      Navigator.pushReplacementNamed(context, '/myAccount');
-                    }
+                    await loginService.signIn(user, _login.text, _password.text);
+                    Navigator.pushReplacementNamed(context, '/myAccount');
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => MyAccount(),
+                        ), //zmiana na zalogowany screen
+                        (Route<dynamic> route) => false);
+                  } on DiffPasswordException catch (e) {
+                    _password.clear();
+                    AlertBox.showAlertDialog(
+                        context, "Problem...", e.toString(), "OK");
                   } on Exception catch (e) {
                     AlertBox.showAlertDialog(
                         context, "Problem...", e.toString(), "OK");
@@ -78,17 +81,6 @@ class _MyLoginState extends State<MyLogin> {
     );
   }
 
-  _checkData() {
-    final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
-    if (!alphanumeric.hasMatch(_login.text) ||
-        !alphanumeric.hasMatch(_password.text))
-      throw Exception("Nieprawidłowy znak");
-    if (_password.text.length < 3 || _password.text.length > 30)
-      throw Exception("Nieprawidłowa długość hasła");
-    if (_login.text.length < 3 || _login.text.length > 30)
-      throw Exception("Nieprawidłowa długość loginu");
-  }
-
   _loginFormField(TextEditingController controller, String text,
       {obscureText = false}) {
     return new TextFormField(
@@ -98,55 +90,5 @@ class _MyLoginState extends State<MyLogin> {
       ),
       obscureText: obscureText,
     );
-  }
-
-  _signIn() async {
-    Map data = {
-      'username': _login.text,
-      'password': _password.text,
-    };
-    var jsonData;
-    var response = await http.post(
-      loginUrl,
-      headers: user.getHeaders(),
-      body: json.encode(data),
-    );
-    if (response.statusCode != 200)
-      throw Exception(
-          "Upss... wystapil problem z nawiazanie polaczenia\n Kod błędu:" +
-              response.statusCode.toString());
-    jsonData = json.decode(response.body);
-    if (jsonData["success"] == "true") {
-      user.update(response: response);
-      await _getUserData(_login.text);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (BuildContext context) =>
-                MyAccount(),), //zmiana na zalogowany screen
-              (Route<dynamic> route) => false);
-      this.loginSucces = true;
-    } else {
-      _password.clear();
-      throw Exception("Nieprawidłowy login lub hasło");
-    }
-  }
-
-  _getUserData(String login) async {
-    var response = await http.get(
-      userDataUrl + login,
-      headers: user.getHeaders(),
-    );
-    if (response.statusCode != 200)
-      throw Exception("Blad polaczenia: " + response.statusCode.toString());
-    var data = json.decode(response.body);
-    this.user.update(
-        userName: login,
-        firstName: data["firstName"],
-        lastName: data["lastName"],
-        email: data["email"],
-        phoneNumber: data["phoneNumber"],
-        userProfilePhotoUrl: data["userProfilePhotoUrl"],
-        blocked: data["blocked"],
-        login: true);
   }
 }

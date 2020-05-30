@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutterappservice/common/constants.dart';
-//import 'package:flutterappservice/exceptions/diffPasswordException.dart';
+import 'package:flutterappservice/exceptions/diffPasswordException.dart';
 import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
@@ -15,6 +15,7 @@ class LoginService {
     if (login.length < 3 || login.length > 30)
       throw Exception("Nieprawidłowa długość loginu");
   }
+
   signIn(User user, String login, String password) async {
     _checkData(login, password);
     Map data = {
@@ -36,11 +37,12 @@ class LoginService {
       user.update(response: response);
       await getUserData(user, login);
     } else {
-      //throw DiffPasswordException("Nieprawidłowy login lub hasło");
+      throw DiffPasswordException("Nieprawidłowy login lub hasło");
     }
   }
 
   getUserData(User user, String login) async {
+
     var response = await http.get(
       userDataUrl + login,
       headers: user.getHeaders(),
@@ -58,5 +60,4 @@ class LoginService {
         blocked: data["blocked"],
         login: true);
   }
-
 }
