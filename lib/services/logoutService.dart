@@ -8,7 +8,7 @@ class Logout {
       return;
     Response response = await get(logoutUrl, headers: user.getHeaders());
     if (response.statusCode != 200)
-      throw Exception("Blad polaczenia: " + response.statusCode.toString());
+      throw Exception("Upss... There is problem\n\tError code:" + response.statusCode.toString());
     user.logout();
   }
 }

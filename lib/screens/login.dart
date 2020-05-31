@@ -70,7 +70,7 @@ class _MyLoginState extends State<MyLogin> {
                         context, "Problem...", e.toString(), "OK");
                   } on Exception catch (e) {
                     AlertBox.showAlertDialog(
-                        context, "Problem...", e.toString(), "OK");
+                        context, "Problem...", e.toString().substring(11), "OK");
                   }
                 },
               )

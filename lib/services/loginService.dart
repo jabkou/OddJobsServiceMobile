@@ -9,11 +9,11 @@ class LoginService {
     final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
     if (!alphanumeric.hasMatch(login) ||
         !alphanumeric.hasMatch(password))
-      throw Exception("Nieprawidłowy znak");
+      throw Exception("Invalid character");
     if (password.length < 3 || password.length > 30)
-      throw Exception("Nieprawidłowa długość hasła");
+      throw Exception("Invalid length of password");
     if (login.length < 3 || login.length > 30)
-      throw Exception("Nieprawidłowa długość loginu");
+      throw Exception("Invalid length of login");
   }
 
   signIn(User user, String login, String password) async {
@@ -30,15 +30,14 @@ class LoginService {
     );
     if (response.statusCode != 200)
       throw Exception(
-          "Upss... wystapil problem z nawiazanie polaczenia\n Kod błędu:" +
+          "Upss... There is problem\n\tError code: " +
               response.statusCode.toString());
     jsonData = json.decode(response.body);
-    if (jsonData["success"] == "true") {
-      user.update(response: response);
-      await getUserData(user, login);
-    } else {
-      throw DiffPasswordException("Nieprawidłowy login lub hasło");
+    if (jsonData["success"] != "true") {
+      throw DiffPasswordException("Wrong login or password");
     }
+    user.update(response: response);
+    await getUserData(user, login);
   }
 
   getUserData(User user, String login) async {
@@ -48,7 +47,7 @@ class LoginService {
       headers: user.getHeaders(),
     );
     if (response.statusCode != 200)
-      throw Exception("Blad polaczenia: " + response.statusCode.toString());
+      throw Exception("Upss... There is problem\n\tError code: " + response.statusCode.toString());
     var data = json.decode(response.body);
     user.update(
         userName: login,
