@@ -19,7 +19,6 @@ class _RegisterState extends State<Register> {
   final TextEditingController _lastName = new TextEditingController();
   final TextEditingController _phoneNumber = new TextEditingController();
   RegisterService registerService = new RegisterService();
-  bool succRegister = false;
 
   @override
   Widget build(BuildContext context) {

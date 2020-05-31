@@ -2,19 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutterappservice/models/user.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:provider/provider.dart';
+import 'editMyAccount.dart';
 
 class MyAccount extends StatelessWidget {
-  User user;
   @override
   Widget build(BuildContext context) {
-    this.user = Provider.of<User>(context, listen: false);//jest dany false bo jak sie wylogowywalem to wywalalo ze widget Text dostaje nulla bo lecial update do wszystkich sluchaczy
+    User user;
+    user = Provider.of<User>(context,
+        listen:
+            false); //jest dany false bo jak sie wylogowywalem to wywalalo ze widget Text dostaje nulla bo lecial update do wszystkich sluchaczy
     return Scaffold(
       extendBodyBehindAppBar: true,
-      resizeToAvoidBottomPadding: false,
       drawer: NavDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: <Widget>[
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => EditMyAccount()));
+              },
+            ),
+          ),
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -29,7 +42,8 @@ class MyAccount extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
           child: Column(
             children: [
-              Text('My account:',
+              Text(
+                'My account:',
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
@@ -43,9 +57,8 @@ class MyAccount extends StatelessWidget {
               ListTile(
                 title: Text('User name',
                     style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text(this.user.getUserName(),
-                    style: TextStyle(fontWeight: FontWeight.bold)
-                ),
+                subtitle: Text(user.getUserName(),
+                    style: TextStyle(fontWeight: FontWeight.bold)),
                 leading: Icon(
                   Icons.account_box,
                   color: Colors.blue[500],
@@ -55,7 +68,7 @@ class MyAccount extends StatelessWidget {
               ListTile(
                 title: Text('First name',
                     style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text(this.user.getFirstName(),
+                subtitle: Text(user.getFirstName(),
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 leading: Icon(
                   Icons.face,
@@ -66,7 +79,7 @@ class MyAccount extends StatelessWidget {
               ListTile(
                 title: Text('Last name',
                     style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text(this.user.getLastName(),
+                subtitle: Text(user.getLastName(),
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 leading: Icon(
                   Icons.people,
@@ -77,7 +90,7 @@ class MyAccount extends StatelessWidget {
               ListTile(
                 title: Text('Email',
                     style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text(this.user.getEmail(),
+                subtitle: Text(user.getEmail(),
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 leading: Icon(
                   Icons.contact_mail,
@@ -88,7 +101,7 @@ class MyAccount extends StatelessWidget {
               ListTile(
                 title: Text('Phone number',
                     style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text(this.user.getPhoneNumber(),
+                subtitle: Text(user.getPhoneNumber(),
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 leading: Icon(
                   Icons.contact_phone,
