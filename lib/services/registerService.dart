@@ -20,7 +20,7 @@ class RegisterService {
       throw Exception("Invalid length of login");
     if (!emailRegex.hasMatch(email)) throw Exception("Wrong Email");
     if (!phonRegex.hasMatch(phoneNumber) || phoneNumber.length != 9)
-      throw Exception("Wrong phonenumer");
+      throw Exception("Wrong phone numer");
     if (!nameregex.hasMatch(firstName) ||
         firstName.length < 3 ||
         firstName.length > 30) throw Exception("Wrong name");
@@ -31,7 +31,7 @@ class RegisterService {
 
   _confPasswords(String password, String confirmPassword) {
     if (!(password == confirmPassword)) {
-      throw DiffPasswordException("Upss... There is problem\n\tError code: ");
+      throw DiffPasswordException("Passwords must be the same");
     }
   }
 

@@ -87,7 +87,7 @@ class _RegisterState extends State<Register> {
                             context, "Problem...", e.toString(), "OK");
                       }on Exception catch (e) {
                         AlertBox.showAlertDialog(
-                            context, "Problem...", e.toString(), "OK");
+                            context, "Problem...", e.toString().substring(11), "OK");
                       }
                     },
                   ),
