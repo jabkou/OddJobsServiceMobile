@@ -11,6 +11,8 @@ final String advertisementsURL =
 final String reportAdvertisementsURL =
     "http://149.156.146.249:60021/api/reported";
 final String editMyAccountURL = "http://149.156.146.249:60021/api/users";
+final String getUserPhotoURL = "http://149.156.146.249:60021/api/users/img/";
+final String updateUserPhotoURL = "http://149.156.146.249:60021/api/users/img";
 
 List<String> categories = ["HOUSEWORK", "ANIMALSCARE", "GARDENCARE"];
 List<String> cities = ["KRAKOW", "WARSZAWA", "WROCLAW"];
