@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
 class LoginService {
+
   _checkData(String login, String password) {
     final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
     if (!alphanumeric.hasMatch(login) ||
@@ -49,13 +50,13 @@ class LoginService {
     if (response.statusCode != 200)
       throw Exception("Upss... There is problem\n\tError code: " + response.statusCode.toString());
     var data = json.decode(response.body);
+
     user.update(
         userName: login,
         firstName: data["firstName"],
         lastName: data["lastName"],
         email: data["email"],
         phoneNumber: data["phoneNumber"],
-        userProfilePhotoUrl: data["userProfilePhotoUrl"],
         blocked: data["blocked"],
         login: true);
   }
