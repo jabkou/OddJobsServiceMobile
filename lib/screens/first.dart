@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/models/user.dart';
+import 'package:flutterappservice/screens/catalog.dart';
+import 'package:flutterappservice/screens/login.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
+import 'addAdvertisement.dart';
 
 class MyFirst extends StatelessWidget {
   User user;
@@ -64,17 +69,45 @@ class MyFirst extends StatelessWidget {
                 color: Colors.cyan,
                 child: Text('SEARCH FOR JOBS'),
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/catalog');
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => Catalog()));
                 },
               ),
               RaisedButton(
                 color: Colors.cyan,
                 child: Text('ADD JOB'),
-                onPressed: () {
-                  if(!user.isLogin())
-                    Navigator.pushReplacementNamed(context, '/login');
+                onPressed: () async {
+                  if(!user.isLogin()) {
+                    await Alert(
+                        context: context,
+                        title: "You need to log in first",
+                        buttons: [
+                        DialogButton(
+                        child: Text(
+                        "Ok",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  width: 120,
+                  )
+                  ],
+                  ).show();
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => AddAdvertisementPage()));
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => MyLogin()));
+                  }
                   if(user.isLogin())
-                    Navigator.pushReplacementNamed(context, '/myAccount');  //TODO
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => AddAdvertisementPage()));
                 },
               )
             ],

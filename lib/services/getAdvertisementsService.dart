@@ -21,7 +21,7 @@ class GetAdvertisementsService {
   }
   String connectKeys(String url, {workingHours, contractType, city, advertisementCategory, user}){
     String newUrl;
-    if(workingHours != null || contractType!=null || city!=null ||advertisementCategory!=null){
+    if(workingHours != null || contractType!=null || city!=null ||advertisementCategory!=null || user!=null){
       newUrl = url+"?";
     } else{
       return url;
@@ -56,9 +56,9 @@ class GetAdvertisementsService {
     }
     if(user != null && user!="EMPTY"){
       if(newUrl[newUrl.length-1] != '?'){
-        newUrl = newUrl + "&user="+user;
+        newUrl = newUrl + "&createdBy="+user;
       }else{
-        newUrl = newUrl + "user="+user;
+        newUrl = newUrl + "createdBy="+user;
       }
     }
     return newUrl;

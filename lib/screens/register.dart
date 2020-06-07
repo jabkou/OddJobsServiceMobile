@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/exceptions/diffPasswordException.dart';
+import 'package:flutterappservice/screens/first.dart';
 import 'package:flutterappservice/screens/login.dart';
 import 'package:flutterappservice/services/registerService.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
-import '../widgets/alertbox.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -75,19 +76,65 @@ class _RegisterState extends State<Register> {
                             _lastName.text,
                             _phoneNumber.text,
                             _confirmPassword.text);
-                        Navigator.pushReplacementNamed(context, '/login');
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => MyLogin()),
-                            (Route<dynamic> route) => false);
-                      } on DiffPasswordException catch(e){
+                        await Alert(
+                          context: context,
+                          title: "You have been registered!",
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Ok",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              width: 120,
+                            )
+                          ],
+                        ).show();
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => MyFirst()));
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => MyLogin()));
+                      } on DiffPasswordException catch (e) {
                         _password.clear();
                         _confirmPassword.clear();
-                        AlertBox.showAlertDialog(
-                            context, "Problem...", e.toString(), "OK");
-                      }on Exception catch (e) {
-                        AlertBox.showAlertDialog(
-                            context, "Problem...", e.toString(), "OK");
+                        await Alert(
+                          context: context,
+                          title: "Problem...",
+                          desc: e.toString(),
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Ok",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              width: 120,
+                            )
+                          ],
+                        ).show();
+                      } on Exception catch (e) {
+                        await Alert(
+                          context: context,
+                          title: "Problem...",
+                          desc: e.toString(),
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Ok",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              width: 120,
+                            )
+                          ],
+                        ).show();
                       }
                     },
                   ),

@@ -16,8 +16,14 @@ class Catalog extends StatelessWidget {
   String category;
   String workingHour;
   String contractType;
+  String user;
 
-  Catalog({this.city, this.category, this.workingHour, this.contractType});
+  Catalog(
+      {this.city,
+      this.category,
+      this.workingHour,
+      this.contractType,
+      this.user});
 
   final GetAdvertisementsService getAdvertisementsService =
       GetAdvertisementsService();
@@ -82,7 +88,8 @@ class Catalog extends StatelessWidget {
               city: this.city,
               advertisementCategory: this.category,
               workingHours: this.workingHour,
-              contractType: this.contractType),
+              contractType: this.contractType,
+              user: this.user),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.data == null) {
               return Container(
