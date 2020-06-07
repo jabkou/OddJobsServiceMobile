@@ -13,25 +13,25 @@ class RegisterService {
         RegExp(r"^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
     final phonRegex = RegExp(r"^[0-9]+$");
     if (!alphanumeric.hasMatch(username) || !alphanumeric.hasMatch(password))
-      throw Exception("Nieprawidłowy znak");
+      throw Exception("Invalid character");
     if (password.length < 3 || password.length > 70)
-      throw Exception("Nieprawidłowa długość hasła");
+      throw Exception("Invalid length of password");
     if (username.length < 3 || username.length > 30)
-      throw Exception("Nieprawidłowa długość loginu");
-    if (!emailRegex.hasMatch(email)) throw Exception("Błędny email");
+      throw Exception("Invalid length of login");
+    if (!emailRegex.hasMatch(email)) throw Exception("Wrong Email");
     if (!phonRegex.hasMatch(phoneNumber) || phoneNumber.length != 9)
-      throw Exception("Błędny numer");
+      throw Exception("Wrong phone numer");
     if (!nameregex.hasMatch(firstName) ||
         firstName.length < 3 ||
-        firstName.length > 30) throw Exception("Błędne imie");
+        firstName.length > 30) throw Exception("Wrong name");
     if (!nameregex.hasMatch(lastName) ||
         lastName.length < 3 ||
-        lastName.length > 30) throw Exception("Błędne nazwisko");
+        lastName.length > 30) throw Exception("Wrong surname");
   }
 
   _confPasswords(String password, String confirmPassword) {
     if (!(password == confirmPassword)) {
-      throw DiffPasswordException("Podane hasła nie są takie same");
+      throw DiffPasswordException("Passwords must be the same");
     }
   }
 
@@ -57,14 +57,12 @@ class RegisterService {
     );
     if (response.statusCode != 200)
       throw Exception(
-          "Upss... wystapil problem z nawiazanie polaczenia\n Kod błędu: " +
+          "Upss... There is problem\n\tError code: " +
               response.statusCode.toString());
 
     jsonData = json.decode(response.body);
-    if (jsonData.length == 0) {
-      return;
-    } else {
+    if (jsonData.length != 0) {
       throw Exception(response.body);
-    }
+    } 
   }
 }

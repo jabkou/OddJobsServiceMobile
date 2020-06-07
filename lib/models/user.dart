@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -7,7 +9,7 @@ class User with ChangeNotifier {
   String _lastName;
   String _email;
   String _phoneNumber;
-  List _userProfilePhotoUrl; //if they add
+  File _userProfilePhotoUrl; //if they add
   bool _blocked;
   bool _login;
   Map<String, String> _headers = {
@@ -53,7 +55,7 @@ class User with ChangeNotifier {
     return _phoneNumber;
   }
 
-  List getUserProfilePhotoUrl() {
+  File getUserProfilePhotoUrl() {
     return _userProfilePhotoUrl;
   }
 
@@ -75,7 +77,7 @@ class User with ChangeNotifier {
     String lastName,
     String email,
     String phoneNumber,
-    List userProfilePhotoUrl,
+    File userProfilePhotoUrl,
     bool blocked,
     bool login,
     http.Response response,
