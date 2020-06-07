@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutterappservice/common/constants.dart';
 import 'package:http_parser/http_parser.dart';
-// import 'package:http/http.dart';
 import '../models/user.dart';
 
 class UpdateUserProfilPhoto {
@@ -17,6 +16,6 @@ class UpdateUserProfilPhoto {
     Response response = await dio
         .patch(updateUserPhotoURL, data: formData);
     if(response.statusCode != 200)
-      throw Exception("Problem z zaladowaniem zdjecia");
+      throw Exception("Problem with photo load");
   }
 }
