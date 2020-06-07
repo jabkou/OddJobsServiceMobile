@@ -100,28 +100,58 @@ class Catalog extends StatelessWidget {
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          'https://randomuser.me/api/portraits/men/75.jpg'),
-                    ),
-                    title: Text(truncate(snapshot.data[index].title, 45)),
-                    subtitle: Text(truncate(
-                        snapshot.data[index].description.toString(), 80)),
-                    trailing: Text(
-                        snapshot.data[index].city +
-                            '\n' +
-                            snapshot.data[index].reward.toString() +
-                            " zł",
-                        textAlign: TextAlign.right),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) =>
-                                  DetailPage(snapshot.data[index])));
-                    },
-                  );
+                  if (snapshot.data[index].featured)
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            'https://randomuser.me/api/portraits/men/75.jpg'),
+                      ),
+                      title: Text(
+                        truncate(snapshot.data[index].title, 45),
+                        style: TextStyle(
+                          color: Colors.cyan,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text(truncate(
+                          snapshot.data[index].description.toString(), 80)),
+                      trailing: Text(
+                          snapshot.data[index].city +
+                              '\n' +
+                              snapshot.data[index].reward.toString() +
+                              " zł",
+                          textAlign: TextAlign.right),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailPage(snapshot.data[index])));
+                      },
+                    );
+                  else
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            'https://randomuser.me/api/portraits/men/75.jpg'),
+                      ),
+                      title: Text(truncate(snapshot.data[index].title, 45)),
+                      subtitle: Text(truncate(
+                          snapshot.data[index].description.toString(), 80)),
+                      trailing: Text(
+                          snapshot.data[index].city +
+                              '\n' +
+                              snapshot.data[index].reward.toString() +
+                              " zł",
+                          textAlign: TextAlign.right),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailPage(snapshot.data[index])));
+                      },
+                    );
                 },
               );
             }
