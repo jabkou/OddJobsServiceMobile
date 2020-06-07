@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappservice/exceptions/diffPasswordException.dart';
 import 'package:flutterappservice/models/user.dart';
-import 'package:flutterappservice/screens/myAccount.dart';
 import 'package:flutterappservice/services/loginService.dart';
 import 'package:flutterappservice/widgets/navbar.dart';
 import 'package:provider/provider.dart';
-import '../widgets/alertbox.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class MyLogin extends StatefulWidget {
   @override
@@ -57,20 +56,54 @@ class _MyLoginState extends State<MyLogin> {
                 child: Text('NEXT'),
                 onPressed: () async {
                   try {
-                    await loginService.signIn(user, _login.text, _password.text);
-                    Navigator.pushReplacementNamed(context, '/myAccount');
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => MyAccount(),
-                        ), //zmiana na zalogowany screen
-                        (Route<dynamic> route) => false);
+                    await loginService.signIn(
+                        user, _login.text, _password.text);
+                    await Alert(
+                      context: context,
+                      title: "You have been logged in",
+                      buttons: [
+                        DialogButton(
+                          child: Text(
+                            "Ok",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          width: 120,
+                        )
+                      ],
+                    ).show();
+                    Navigator.pop(context);
                   } on DiffPasswordException catch (e) {
                     _password.clear();
-                    AlertBox.showAlertDialog(
-                        context, "Problem...", e.toString(), "OK");
+                    await Alert(
+                      context: context,
+                      title: e.toString(),
+                      buttons: [
+                        DialogButton(
+                          child: Text(
+                            "Ok",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          width: 120,
+                        )
+                      ],
+                    ).show();
                   } on Exception catch (e) {
-                    AlertBox.showAlertDialog(
-                        context, "Problem...", e.toString().substring(11), "OK");
+                    await Alert(
+                      context: context,
+                      title: e.toString(),
+                      buttons: [
+                        DialogButton(
+                          child: Text(
+                            "Ok",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          width: 120,
+                        )
+                      ],
+                    ).show();
                   }
                 },
               )
