@@ -103,7 +103,7 @@ class Catalog extends StatelessWidget {
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage(
-                          'https://randomuser.me/api/portraits/men/75.jpg'),
+                          'https://cdn0.iconfinder.com/data/icons/business-focused/226/human-network-01-007-512.png'),
                     ),
                     title: Text(truncate(snapshot.data[index].title, 45)),
                     subtitle: Text(truncate(

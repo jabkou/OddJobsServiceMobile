@@ -34,7 +34,7 @@ class _EditMyAccountState extends State<EditMyAccount> {
     User user;
     user = Provider.of<User>(context, listen: false);
     if (_userNewPhoto == null)
-    _userImage = _getUserPhotoService.getUserProfilePhoto(user);
+    _userImage = _getUserPhotoService.getUserProfilePhoto(user.getUserName());
     return Scaffold(
       extendBodyBehindAppBar: true,
       drawer: NavDrawer(),

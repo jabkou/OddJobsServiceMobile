@@ -12,8 +12,8 @@ class MyAccount extends StatelessWidget {
     User user;
     user = Provider.of<User>(context,
         listen:
-            false); //jest dany false bo jak sie wylogowywalem to wywalalo ze widget Text dostaje nulla bo lecial update do wszystkich sluchaczy
-    Image userImage = _getUserPhotoService.getUserProfilePhoto(user);
+            false);
+    Image userImage = _getUserPhotoService.getUserProfilePhoto(user.getUserName());
     return Scaffold(
       extendBodyBehindAppBar: true,
       drawer: NavDrawer(),
