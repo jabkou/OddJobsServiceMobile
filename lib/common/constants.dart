@@ -2,17 +2,18 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-final String logoutUrl = "http://149.156.146.249:60021/api/logout";
-final String registerUrl = "http://149.156.146.249:60021/api/users";
-final String loginUrl = "http://149.156.146.249:60021/api/login";
-final String userDataUrl = "http://149.156.146.249:60021/api/users/";
-final String advertisementsURL =
-    "http://149.156.146.249:60021/api/advertisements";
-final String reportAdvertisementsURL =
-    "http://149.156.146.249:60021/api/reported";
-final String editMyAccountURL = "http://149.156.146.249:60021/api/users";
-final String getUserPhotoURL = "http://149.156.146.249:60021/api/users/img/";
-final String updateUserPhotoURL = "http://149.156.146.249:60021/api/users/img";
+final String server = "http://192.168.0.88:8080";
+//final String server = "http://149.156.146.249:60021/api";
+
+final String logoutUrl = server + "/logout";
+final String registerUrl = server + "/users";
+final String loginUrl = server + "/login";
+final String userDataUrl = server + "/users/";
+final String advertisementsURL = server + "/advertisements";
+final String reportAdvertisementsURL = server + "/reported";
+final String editMyAccountURL = server + "/users";
+final String getUserPhotoURL = server + "/users/img/";
+final String updateUserPhotoURL = server + "/users/img";
 
 List<String> categories = ["HOUSEWORK", "ANIMALSCARE", "GARDENCARE"];
 List<String> cities = ["KRAKOW", "WARSZAWA", "WROCLAW"];
@@ -21,12 +22,7 @@ List<String> contractTypes = [
   "EMPLOYMENT_CONTRACT",
   "MANDATORY_CONTRACT",
 ];
-List<String> emptyCategories = [
-  "",
-  "HOUSEWORK",
-  "ANIMALSCARE",
-  "GARDENCARE"
-];
+List<String> emptyCategories = ["", "HOUSEWORK", "ANIMALSCARE", "GARDENCARE"];
 List<String> emptyCities = ["", "KRAKOW", "WARSZAWA", "WROCLAW"];
 List<String> emptyWorkingHours = [
   "",
