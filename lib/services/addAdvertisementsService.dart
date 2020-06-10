@@ -8,7 +8,7 @@ import '../models/user.dart';
 class AddAdvertisementsService {
   checkData(String title, String description, String category, String city,
       String workingHours, String contractType, String reward) {
-    final alphanumeric = RegExp("^\\s*[\\da-zA-Z][\\da-zA-Z\\s]*");
+    final alphanumeric = RegExp("^\\s*[\\da-zA-Z][\\da-zA-Z\\s]*\$");
     final numeric = RegExp(r'^[0-9]+$');
     if (title == null ||
         description == null ||
@@ -70,7 +70,7 @@ class AddAdvertisementsService {
 
     var jsonData = json.decode(response.body);
     if (jsonData.length != 0) {
-      throw (response.body.toString());
+      throw Exception(response.body.toString());
     }
   }
 }
