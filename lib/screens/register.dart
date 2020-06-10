@@ -20,7 +20,6 @@ class _RegisterState extends State<Register> {
   final TextEditingController _lastName = new TextEditingController();
   final TextEditingController _phoneNumber = new TextEditingController();
   RegisterService registerService = new RegisterService();
-  bool succRegister = false;
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +121,7 @@ class _RegisterState extends State<Register> {
                         await Alert(
                           context: context,
                           title: "Problem...",
-                          desc: e.toString(),
+                          desc: e.toString().substring(11),
                           buttons: [
                             DialogButton(
                               child: Text(

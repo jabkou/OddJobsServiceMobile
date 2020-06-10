@@ -4,6 +4,7 @@ import 'package:flutterappservice/models/advertisementModel.dart';
 import 'package:flutterappservice/models/user.dart';
 import 'package:flutterappservice/screens/reportAdvertisement.dart';
 import 'package:flutterappservice/services/deleteAdvertisementService.dart';
+import 'package:flutterappservice/services/getUserPhotoService.dart';
 import 'package:flutterappservice/services/loginService.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -16,11 +17,16 @@ class DetailPage extends StatelessWidget {
   final Advertisement advertisement;
   DetailPage(this.advertisement);
   LoginService loginService = new LoginService();
+  GetUserPhotoService getUserPhotoService = new GetUserPhotoService();
+
   @override
   Widget build(BuildContext context) {
+
     User user, author = User.emptyUser();
     user = Provider.of<User>(context);
     loginService.getUserData(author, advertisement.createdBy);
+    Image userImage = getUserPhotoService.getUserProfilePhoto(advertisement.createdBy);
+
     final coursePrice = Container(
       padding: const EdgeInsets.all(2.0),
       decoration: new BoxDecoration(
@@ -112,36 +118,91 @@ class DetailPage extends StatelessWidget {
       ],
     );
 
-    final topContent = Stack(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(left: 5.0),
-          height: MediaQuery.of(context).size.height * 0.5,
-          child:
-              Image.network("https://randomuser.me/api/portraits/men/75.jpg"),
-        ),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.5,
-          padding: EdgeInsets.all(40.0),
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(color: Color.fromRGBO(0,255,255, .4)),
-          child: Center(
-            child: topContentText,
-          ),
-        ),
-        Positioned(
-          left: 8.0,
-          top: 60.0,
-          child: InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Icon(Icons.arrow_back, color: Colors.white),
-          ),
-        )
-      ],
-    );
+        final topContent = Stack(
+          alignment: const Alignment(0, 0.8),
+          children: [
+            Image(image: userImage.image, fit: BoxFit.cover),
+            Container(
+//              alignment: const Alignment(0, 0),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              decoration: BoxDecoration(
+                color: Colors.black38,
+              ),
+              child: Text(
+                advertisement.title,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            )
+          ]
+        );
 
+        final middle = SizedBox(
+          child: Card(
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  title: Text('City',
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                  subtitle: Text(advertisement.city,
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: Icon(
+                    Icons.location_city,
+                    color: Colors.blue[500],
+                  ),
+                ),
+                Divider(),
+                ListTile(
+                  title: Text('Contract',
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                  subtitle: Text(advertisement.contractType,
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: Icon(
+                    Icons.insert_drive_file,
+                    color: Colors.blue[500],
+                  ),
+                ),
+                Divider(),
+                ListTile(
+                  title: Text('Working hours',
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                  subtitle: Text(advertisement.workingHours,
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: Icon(
+                    Icons.access_time,
+                    color: Colors.blue[500],
+                  ),
+                ),
+                Divider(),
+                ListTile(
+                  title: Text('Category',
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                  subtitle: Text(advertisement.category,
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: Icon(
+                    Icons.category,
+                    color: Colors.blue[500],
+                  ),
+                ),
+                Divider(),
+                ListTile(
+                  title: Text('Salary',
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                  subtitle: Text(advertisement.reward.toString()+" zł",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: Icon(
+                    Icons.attach_money,
+                    color: Colors.blue[500],
+                  ),
+                ),
+                Divider(),
+              ],
+            ),
+          ),
+        );
 
 
     final bottomContentText = Text(
@@ -149,7 +210,7 @@ class DetailPage extends StatelessWidget {
       style: TextStyle(fontSize: 18.0),
     );
     final callButton = Container(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
+        padding: EdgeInsets.symmetric(vertical: 7.0),
         width: MediaQuery.of(context).size.width,
         child: RaisedButton(
           onPressed: () async => await launch("tel:"+author.getPhoneNumber()),
@@ -157,7 +218,7 @@ class DetailPage extends StatelessWidget {
           child: Text("Call me!", style: TextStyle(color: Colors.white)),
         ));
     final mailButton = Container(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
+        padding: EdgeInsets.symmetric(vertical: 7.0),
         width: MediaQuery.of(context).size.width,
         child: RaisedButton(
           onPressed: () async => await launch("mailto:"+author.getEmail()),
@@ -165,7 +226,7 @@ class DetailPage extends StatelessWidget {
           child: Text("Mail me!", style: TextStyle(color: Colors.white)),
         ));
     final reportButton = Container(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
+        padding: EdgeInsets.symmetric(vertical: 7.0),
         width: MediaQuery.of(context).size.width,
         child: RaisedButton(
           onPressed: () async {
@@ -197,7 +258,7 @@ class DetailPage extends StatelessWidget {
           child: Text("Report advertisement", style: TextStyle(color: Colors.white)),
         ));
     final deleteButton = Container(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
+        padding: EdgeInsets.symmetric(vertical: 7.0),
         width: MediaQuery.of(context).size.width,
         child: RaisedButton(
           onPressed: () async {
@@ -250,7 +311,7 @@ class DetailPage extends StatelessWidget {
             .size
             .width,
         // color: Theme.of(context).primaryColor,
-        padding: EdgeInsets.all(40.0),
+        padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
         child: Center(
           child: Column(
             children: <Widget>[
@@ -285,8 +346,13 @@ class DetailPage extends StatelessWidget {
       );
     }
     return Scaffold(
-      body: Column(
-        children: <Widget>[topContent, bottomContent],
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: <Widget>[topContent,middle, bottomContent],
+          ),
+        ),
+
       ),
     );
   }
