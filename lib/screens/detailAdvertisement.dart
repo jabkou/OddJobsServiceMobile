@@ -12,7 +12,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'login.dart';
 
-
 // ignore: must_be_immutable
 class DetailPage extends StatelessWidget {
   final Advertisement advertisement;
@@ -45,7 +44,7 @@ class DetailPage extends StatelessWidget {
         SizedBox(height: 50.0),
         Text(
           advertisement.title,
-          style: TextStyle(color: Colors.white, fontSize: 45.0),
+          style: TextStyle(color: Colors.white, fontSize: 30.0),
         ),
         SizedBox(height: 220.0),
 
