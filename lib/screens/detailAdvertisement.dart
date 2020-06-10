@@ -151,7 +151,7 @@ class DetailPage extends StatelessWidget {
                   subtitle: Text(advertisement.city,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   leading: Icon(
-                    Icons.account_box,
+                    Icons.location_city,
                     color: Colors.blue[500],
                   ),
                 ),
@@ -162,7 +162,7 @@ class DetailPage extends StatelessWidget {
                   subtitle: Text(advertisement.contractType,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   leading: Icon(
-                    Icons.face,
+                    Icons.insert_drive_file,
                     color: Colors.blue[500],
                   ),
                 ),
@@ -173,7 +173,7 @@ class DetailPage extends StatelessWidget {
                   subtitle: Text(advertisement.workingHours,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   leading: Icon(
-                    Icons.face,
+                    Icons.access_time,
                     color: Colors.blue[500],
                   ),
                 ),
@@ -184,7 +184,7 @@ class DetailPage extends StatelessWidget {
                   subtitle: Text(advertisement.category,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   leading: Icon(
-                    Icons.face,
+                    Icons.category,
                     color: Colors.blue[500],
                   ),
                 ),
@@ -195,7 +195,7 @@ class DetailPage extends StatelessWidget {
                   subtitle: Text(advertisement.reward.toString()+" zł",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   leading: Icon(
-                    Icons.face,
+                    Icons.attach_money,
                     color: Colors.blue[500],
                   ),
                 ),
